@@ -1,0 +1,1304 @@
+[
+  {
+    "paperId": "53c9f3c34d8481adaf24df3b25581ccf1bc53f5c",
+    "url": "https://www.semanticscholar.org/paper/53c9f3c34d8481adaf24df3b25581ccf1bc53f5c",
+    "title": "Physics-informed machine learning",
+    "venue": "Nature Reviews Physics",
+    "year": 2021,
+    "referenceCount": 226,
+    "citationCount": 4695,
+    "openAccessPdf": {
+      "url": "https://www.osti.gov/biblio/2282016",
+      "status": "GREEN",
+      "license": "other-oa",
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1038/s42254-021-00314-5?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1038/s42254-021-00314-5, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": null,
+    "authors": [
+      {
+        "authorId": "1720124",
+        "name": "G. Karniadakis"
+      },
+      {
+        "authorId": "3439407",
+        "name": "I. Kevrekidis"
+      },
+      {
+        "authorId": "2149373363",
+        "name": "Lu Lu"
+      },
+      {
+        "authorId": "3410970",
+        "name": "P. Perdikaris"
+      },
+      {
+        "authorId": "118188801",
+        "name": "Sifan Wang"
+      },
+      {
+        "authorId": "2145494483",
+        "name": "Liu Yang"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "f9c602cc436a9ea2f9e7db48c77d924e09ce3c32",
+    "url": "https://www.semanticscholar.org/paper/f9c602cc436a9ea2f9e7db48c77d924e09ce3c32",
+    "title": "Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning Algorithms",
+    "venue": "arXiv.org",
+    "year": 2017,
+    "referenceCount": 6,
+    "citationCount": 9694,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1708.07747, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "145642373",
+        "name": "Han Xiao"
+      },
+      {
+        "authorId": "4565995",
+        "name": "Kashif Rasul"
+      },
+      {
+        "authorId": "2742129",
+        "name": "Roland Vollgraf"
+      }
+    ],
+    "abstract": "We present Fashion-MNIST, a new dataset comprising of 28x28 grayscale images of 70,000 fashion products from 10 categories, with 7,000 images per category. The training set has 60,000 images and the test set has 10,000 images. Fashion-MNIST is intended to serve as a direct drop-in replacement for the original MNIST dataset for benchmarking machine learning algorithms, as it shares the same image size, data format and the structure of training and testing splits. The dataset is freely available at this https URL"
+  },
+  {
+    "paperId": "9c9d7247f8c51ec5a02b0d911d1d7b9e8160495d",
+    "url": "https://www.semanticscholar.org/paper/9c9d7247f8c51ec5a02b0d911d1d7b9e8160495d",
+    "title": "TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems",
+    "venue": "arXiv.org",
+    "year": 2016,
+    "referenceCount": 54,
+    "citationCount": 11437,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1603.04467, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "2057642721",
+        "name": "Martín Abadi"
+      },
+      {
+        "authorId": "2078528337",
+        "name": "Ashish Agarwal"
+      },
+      {
+        "authorId": "144758007",
+        "name": "P. Barham"
+      },
+      {
+        "authorId": "2445241",
+        "name": "E. Brevdo"
+      },
+      {
+        "authorId": "2545358",
+        "name": "Z. Chen"
+      },
+      {
+        "authorId": "48738717",
+        "name": "C. Citro"
+      },
+      {
+        "authorId": "32131713",
+        "name": "G. Corrado"
+      },
+      {
+        "authorId": "36347083",
+        "name": "Andy Davis"
+      },
+      {
+        "authorId": "49959210",
+        "name": "J. Dean"
+      },
+      {
+        "authorId": "145139947",
+        "name": "M. Devin"
+      },
+      {
+        "authorId": "1780892",
+        "name": "S. Ghemawat"
+      },
+      {
+        "authorId": "153440022",
+        "name": "I. Goodfellow"
+      },
+      {
+        "authorId": "2064102917",
+        "name": "A. Harp"
+      },
+      {
+        "authorId": "2060655766",
+        "name": "G. Irving"
+      },
+      {
+        "authorId": "2090818",
+        "name": "M. Isard"
+      },
+      {
+        "authorId": "39978391",
+        "name": "Yangqing Jia"
+      },
+      {
+        "authorId": "1944541",
+        "name": "R. Józefowicz"
+      },
+      {
+        "authorId": "40527594",
+        "name": "Lukasz Kaiser"
+      },
+      {
+        "authorId": "1942300",
+        "name": "M. Kudlur"
+      },
+      {
+        "authorId": "3369421",
+        "name": "J. Levenberg"
+      },
+      {
+        "authorId": "30415265",
+        "name": "Dandelion Mané"
+      },
+      {
+        "authorId": "3089272",
+        "name": "R. Monga"
+      },
+      {
+        "authorId": "144375552",
+        "name": "Sherry Moore"
+      },
+      {
+        "authorId": "20154699",
+        "name": "D. Murray"
+      },
+      {
+        "authorId": "2357599490",
+        "name": "C. Olah"
+      },
+      {
+        "authorId": "144927151",
+        "name": "M. Schuster"
+      },
+      {
+        "authorId": "1789737",
+        "name": "Jonathon Shlens"
+      },
+      {
+        "authorId": "32163737",
+        "name": "Benoit Steiner"
+      },
+      {
+        "authorId": "1701686",
+        "name": "I. Sutskever"
+      },
+      {
+        "authorId": "35210462",
+        "name": "Kunal Talwar"
+      },
+      {
+        "authorId": "2080690",
+        "name": "P. Tucker"
+      },
+      {
+        "authorId": "2657155",
+        "name": "Vincent Vanhoucke"
+      },
+      {
+        "authorId": "2053781980",
+        "name": "Vijay Vasudevan"
+      },
+      {
+        "authorId": "1765169",
+        "name": "F. Viégas"
+      },
+      {
+        "authorId": "1689108",
+        "name": "O. Vinyals"
+      },
+      {
+        "authorId": "47941411",
+        "name": "Pete Warden"
+      },
+      {
+        "authorId": "145233583",
+        "name": "M. Wattenberg"
+      },
+      {
+        "authorId": "35078078",
+        "name": "M. Wicke"
+      },
+      {
+        "authorId": "2117163698",
+        "name": "Yuan Yu"
+      },
+      {
+        "authorId": "2152198093",
+        "name": "Xiaoqiang Zheng"
+      }
+    ],
+    "abstract": "TensorFlow is an interface for expressing machine learning algorithms, and an implementation for executing such algorithms. A computation expressed using TensorFlow can be executed with little or no change on a wide variety of heterogeneous systems, ranging from mobile devices such as phones and tablets up to large-scale distributed systems of hundreds of machines and thousands of computational devices such as GPU cards. The system is flexible and can be used to express a wide variety of algorithms, including training and inference algorithms for deep neural network models, and it has been used for conducting research and for deploying machine learning systems into production across more than a dozen areas of computer science and other fields, including speech recognition, computer vision, robotics, information retrieval, natural language processing, geographic information extraction, and computational drug discovery. This paper describes the TensorFlow interface and an implementation of that interface that we have built at Google. The TensorFlow API and a reference implementation were released as an open-source package under the Apache 2.0 license in November, 2015 and are available at www.tensorflow.org."
+  },
+  {
+    "paperId": "0090023afc66cd2741568599057f4e82b566137c",
+    "url": "https://www.semanticscholar.org/paper/0090023afc66cd2741568599057f4e82b566137c",
+    "title": "A Survey on Bias and Fairness in Machine Learning",
+    "venue": "ACM Computing Surveys",
+    "year": 2019,
+    "referenceCount": 188,
+    "citationCount": 4963,
+    "openAccessPdf": {
+      "url": "https://arxiv.org/pdf/1908.09635",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1908.09635, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "51997673",
+        "name": "Ninareh Mehrabi"
+      },
+      {
+        "authorId": "2775559",
+        "name": "Fred Morstatter"
+      },
+      {
+        "authorId": "51884035",
+        "name": "N. Saxena"
+      },
+      {
+        "authorId": "1782658",
+        "name": "Kristina Lerman"
+      },
+      {
+        "authorId": "143728483",
+        "name": "A. Galstyan"
+      }
+    ],
+    "abstract": "With the widespread use of artificial intelligence (AI) systems and applications in our everyday lives, accounting for fairness has gained significant importance in designing and engineering of such systems. AI systems can be used in many sensitive environments to make important and life-changing decisions; thus, it is crucial to ensure that these decisions do not reflect discriminatory behavior toward certain groups or populations. More recently some work has been developed in traditional machine learning and deep learning that address such challenges in different subdomains. With the commercialization of these systems, researchers are becoming more aware of the biases that these applications can contain and are attempting to address them. In this survey, we investigated different real-world applications that have shown biases in various ways, and we listed different sources of biases that can affect AI applications. We then created a taxonomy for fairness definitions that machine learning researchers have defined to avoid the existing bias in AI systems. In addition to that, we examined different domains and subdomains in AI showing what researchers have observed with regard to unfair outcomes in the state-of-the-art methods and ways they have tried to address them. There are still many future directions and solutions that can be taken to mitigate the problem of bias in AI systems. We are hoping that this survey will motivate researchers to tackle these issues in the near future by observing existing work in their respective fields."
+  },
+  {
+    "paperId": "bc00ff34ec7772080c7039b17f7069a2f7df0889",
+    "url": "https://www.semanticscholar.org/paper/bc00ff34ec7772080c7039b17f7069a2f7df0889",
+    "title": "Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead",
+    "venue": "Nature Machine Intelligence",
+    "year": 2018,
+    "referenceCount": 87,
+    "citationCount": 7035,
+    "openAccessPdf": {
+      "url": "https://www.nature.com/articles/s42256-019-0048-x.pdf",
+      "status": "BRONZE",
+      "license": null,
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1038/s42256-019-0048-x?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1038/s42256-019-0048-x, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Medicine",
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "48395540",
+        "name": "C. Rudin"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "f0dcc9aa31dc9b31b836bcac1b140c8c94a2982d",
+    "url": "https://www.semanticscholar.org/paper/f0dcc9aa31dc9b31b836bcac1b140c8c94a2982d",
+    "title": "Membership Inference Attacks Against Machine Learning Models",
+    "venue": "IEEE Symposium on Security and Privacy",
+    "year": 2016,
+    "referenceCount": 40,
+    "citationCount": 4573,
+    "openAccessPdf": {
+      "url": "https://arxiv.org/pdf/1610.05820",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1610.05820, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "2520493",
+        "name": "R. Shokri"
+      },
+      {
+        "authorId": "34828439",
+        "name": "M. Stronati"
+      },
+      {
+        "authorId": "3469125",
+        "name": "Congzheng Song"
+      },
+      {
+        "authorId": "1723945",
+        "name": "Vitaly Shmatikov"
+      }
+    ],
+    "abstract": "We quantitatively investigate how machine learning models leak information about the individual data records on which they were trained. We focus on the basic membership inference attack: given a data record and black-box access to a model, determine if the record was in the model's training dataset. To perform membership inference against a target model, we make adversarial use of machine learning and train our own inference model to recognize differences in the target model's predictions on the inputs that it trained on versus the inputs that it did not train on. We empirically evaluate our inference techniques on classification models trained by commercial \"machine learning as a service\" providers such as Google and Amazon. Using realistic datasets and classification tasks, including a hospital discharge dataset whose membership is sensitive from the privacy perspective, we show that these models can be vulnerable to membership inference attacks. We then investigate the factors that influence this leakage and evaluate mitigation strategies."
+  },
+  {
+    "paperId": "794b3ffd28d28606230efc975eeec9f0522fb139",
+    "url": "https://www.semanticscholar.org/paper/794b3ffd28d28606230efc975eeec9f0522fb139",
+    "title": "An Introduction to Machine Learning",
+    "venue": "Cambridge International Law Journal",
+    "year": 2017,
+    "referenceCount": 87,
+    "citationCount": 4379,
+    "openAccessPdf": {
+      "url": "",
+      "status": "CLOSED",
+      "license": null,
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1007/978-3-319-63913-0?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1007/978-3-319-63913-0, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "1713687",
+        "name": "M. Kubát"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "5c39e37022661f81f79e481240ed9b175dec6513",
+    "url": "https://www.semanticscholar.org/paper/5c39e37022661f81f79e481240ed9b175dec6513",
+    "title": "Towards A Rigorous Science of Interpretable Machine Learning",
+    "venue": "",
+    "year": 2017,
+    "referenceCount": 56,
+    "citationCount": 4243,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1702.08608, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "1388372395",
+        "name": "F. Doshi-Velez"
+      },
+      {
+        "authorId": "3351164",
+        "name": "Been Kim"
+      }
+    ],
+    "abstract": "As machine learning systems become ubiquitous, there has been a surge of interest in interpretable machine learning: systems that provide explanation for their outputs. These explanations are often used to qualitatively assess other criteria such as safety or non-discrimination. However, despite the interest in interpretability, there is very little consensus on what interpretable machine learning is and how it should be measured. In this position paper, we first define interpretability and describe when interpretability is needed (and when it is not). Next, we suggest a taxonomy for rigorous evaluation and expose open questions towards a more rigorous science of interpretable machine learning."
+  },
+  {
+    "paperId": "f9c990b1b5724e50e5632b94fdb7484ece8a6ce7",
+    "url": "https://www.semanticscholar.org/paper/f9c990b1b5724e50e5632b94fdb7484ece8a6ce7",
+    "title": "Convolutional LSTM Network: A Machine Learning Approach for Precipitation Nowcasting",
+    "venue": "Neural Information Processing Systems",
+    "year": 2015,
+    "referenceCount": 26,
+    "citationCount": 8729,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1506.04214, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "3008587",
+        "name": "Xingjian Shi"
+      },
+      {
+        "authorId": "2192200",
+        "name": "Zhourong Chen"
+      },
+      {
+        "authorId": "49528584",
+        "name": "Hao Wang"
+      },
+      {
+        "authorId": "1739816",
+        "name": "D. Yeung"
+      },
+      {
+        "authorId": "145771919",
+        "name": "W. Wong"
+      },
+      {
+        "authorId": "2183294",
+        "name": "W. Woo"
+      }
+    ],
+    "abstract": "The goal of precipitation nowcasting is to predict the future rainfall intensity in a local region over a relatively short period of time. Very few previous studies have examined this crucial and challenging weather forecasting problem from the machine learning perspective. In this paper, we formulate precipitation nowcasting as a spatiotemporal sequence forecasting problem in which both the input and the prediction target are spatiotemporal sequences. By extending the fully connected LSTM (FC-LSTM) to have convolutional structures in both the input-to-state and state-to-state transitions, we propose the convolutional LSTM (ConvLSTM) and use it to build an end-to-end trainable model for the precipitation nowcasting problem. Experiments show that our ConvLSTM network captures spatiotemporal correlations better and consistently outperforms FC-LSTM and the state-of-the-art operational ROVER algorithm for precipitation nowcasting."
+  },
+  {
+    "paperId": "7872f34e2a164c5cf3c34a7a7433dc3342b6c7ea",
+    "url": "https://www.semanticscholar.org/paper/7872f34e2a164c5cf3c34a7a7433dc3342b6c7ea",
+    "title": "Machine Learning: Algorithms, Real-World Applications and Research Directions",
+    "venue": "SN Computer Science",
+    "year": 2021,
+    "referenceCount": 144,
+    "citationCount": 3602,
+    "openAccessPdf": {
+      "url": "https://link.springer.com/content/pdf/10.1007/s42979-021-00592-x.pdf",
+      "status": "BRONZE",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC7983091, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Medicine"
+    ],
+    "authors": [
+      {
+        "authorId": "3456687",
+        "name": "Iqbal H. Sarker"
+      }
+    ],
+    "abstract": "In the current age of the Fourth Industrial Revolution (4IR or Industry 4.0), the digital world has a wealth of data, such as Internet of Things (IoT) data, cybersecurity data, mobile data, business data, social media data, health data, etc. To intelligently analyze these data and develop the corresponding smart and automated applications, the knowledge of artificial intelligence (AI), particularly, machine learning (ML) is the key. Various types of machine learning algorithms such as supervised, unsupervised, semi-supervised, and reinforcement learning exist in the area. Besides, the deep learning, which is part of a broader family of machine learning methods, can intelligently analyze the data on a large scale. In this paper, we present a comprehensive view on these machine learning algorithms that can be applied to enhance the intelligence and the capabilities of an application. Thus, this study’s key contribution is explaining the principles of different machine learning techniques and their applicability in various real-world application domains, such as cybersecurity systems, smart cities, healthcare, e-commerce, agriculture, and many more. We also highlight the challenges and potential research directions based on our study. Overall, this paper aims to serve as a reference point for both academia and industry professionals as well as for decision-makers in various real-world situations and application areas, particularly from the technical point of view."
+  },
+  {
+    "paperId": "597bd2e45427563cdf025e53a3239006aa364cfc",
+    "url": "https://www.semanticscholar.org/paper/597bd2e45427563cdf025e53a3239006aa364cfc",
+    "title": "Open Graph Benchmark: Datasets for Machine Learning on Graphs",
+    "venue": "Neural Information Processing Systems",
+    "year": 2020,
+    "referenceCount": 110,
+    "citationCount": 3084,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/2005.00687, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "48594758",
+        "name": "Weihua Hu"
+      },
+      {
+        "authorId": "3410500",
+        "name": "Matthias Fey"
+      },
+      {
+        "authorId": "2095762",
+        "name": "M. Zitnik"
+      },
+      {
+        "authorId": "2047998",
+        "name": "Yuxiao Dong"
+      },
+      {
+        "authorId": "40046694",
+        "name": "Hongyu Ren"
+      },
+      {
+        "authorId": "2156641189",
+        "name": "Bowen Liu"
+      },
+      {
+        "authorId": "1754926",
+        "name": "Michele Catasta"
+      },
+      {
+        "authorId": "1702139",
+        "name": "J. Leskovec"
+      }
+    ],
+    "abstract": "We present the Open Graph Benchmark (OGB), a diverse set of challenging and realistic benchmark datasets to facilitate scalable, robust, and reproducible graph machine learning (ML) research. OGB datasets are large-scale (up to 100+ million nodes and 1+ billion edges), encompass multiple important graph ML tasks, and cover a diverse range of domains, ranging from social and information networks to biological networks, molecular graphs, source code ASTs, and knowledge graphs. For each dataset, we provide a unified evaluation protocol using meaningful application-specific data splits and evaluation metrics. In addition to building the datasets, we also perform extensive benchmark experiments for each dataset. Our experiments suggest that OGB datasets present significant challenges of scalability to large-scale graphs and out-of-distribution generalization under realistic data splits, indicating fruitful opportunities for future research. Finally, OGB provides an automated end-to-end graph ML pipeline that simplifies and standardizes the process of graph data loading, experimental setup, and model evaluation. OGB will be regularly updated and welcomes inputs from the community. OGB datasets as well as data loaders, evaluation scripts, baseline code, and leaderboards are publicly available at this https URL ."
+  },
+  {
+    "paperId": "9f5b82d9915d0752957602224c5056be7e749c83",
+    "url": "https://www.semanticscholar.org/paper/9f5b82d9915d0752957602224c5056be7e749c83",
+    "title": "Foundations of Machine Learning",
+    "venue": "Introduction to AI Techniques for Renewable Energy Systems",
+    "year": 2021,
+    "referenceCount": 5,
+    "citationCount": 3342,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.2139/ssrn.3399990?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.2139/ssrn.3399990, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": null,
+    "authors": [
+      {
+        "authorId": "36203548",
+        "name": "N. Nathani"
+      },
+      {
+        "authorId": "2242477024",
+        "name": "Abhishek Singh"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "8e3c872076750bcce868808f9d4d7a038f950040",
+    "url": "https://www.semanticscholar.org/paper/8e3c872076750bcce868808f9d4d7a038f950040",
+    "title": "Pattern Recognition And Machine Learning",
+    "venue": "",
+    "year": 2016,
+    "referenceCount": 1,
+    "citationCount": 6839,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "2345603162",
+        "name": "Laura Strauss"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "ad4fd2c149f220a62441576af92a8a669fe81246",
+    "url": "https://www.semanticscholar.org/paper/ad4fd2c149f220a62441576af92a8a669fe81246",
+    "title": "Scikit-learn: Machine Learning in Python",
+    "venue": "Journal of machine learning research",
+    "year": 2011,
+    "referenceCount": 17,
+    "citationCount": 82414,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1201.0490, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "2570016",
+        "name": "Fabian Pedregosa"
+      },
+      {
+        "authorId": "3025780",
+        "name": "G. Varoquaux"
+      },
+      {
+        "authorId": "1797840",
+        "name": "Alexandre Gramfort"
+      },
+      {
+        "authorId": "52200573",
+        "name": "V. Michel"
+      },
+      {
+        "authorId": "8493461",
+        "name": "B. Thirion"
+      },
+      {
+        "authorId": "2958756",
+        "name": "O. Grisel"
+      },
+      {
+        "authorId": "27257992",
+        "name": "Mathieu Blondel"
+      },
+      {
+        "authorId": "1881041",
+        "name": "Gilles Louppe"
+      },
+      {
+        "authorId": "2780213",
+        "name": "P. Prettenhofer"
+      },
+      {
+        "authorId": "2067827437",
+        "name": "Ron Weiss"
+      },
+      {
+        "authorId": "39571582",
+        "name": "Ron J. Weiss"
+      },
+      {
+        "authorId": "2081469",
+        "name": "J. Vanderplas"
+      },
+      {
+        "authorId": "144720379",
+        "name": "Alexandre Passos"
+      },
+      {
+        "authorId": "3084321",
+        "name": "D. Cournapeau"
+      },
+      {
+        "authorId": "2423884",
+        "name": "M. Brucher"
+      },
+      {
+        "authorId": "35243423",
+        "name": "M. Perrot"
+      },
+      {
+        "authorId": "1710398",
+        "name": "E. Duchesnay"
+      }
+    ],
+    "abstract": "Scikit-learn is a Python module integrating a wide range of state-of-the-art machine learning algorithms for medium-scale supervised and unsupervised problems. This package focuses on bringing machine learning to non-specialists using a general-purpose high-level language. Emphasis is put on ease of use, performance, documentation, and API consistency. It has minimal dependencies and is distributed under the simplified BSD license, encouraging its use in both academic and commercial settings. Source code, binaries, and documentation can be downloaded from http://scikit-learn.sourceforge.net."
+  },
+  {
+    "paperId": "d422df8bff4e677a3077635db116679d25142bfc",
+    "url": "https://www.semanticscholar.org/paper/d422df8bff4e677a3077635db116679d25142bfc",
+    "title": "Machine learning: Trends, perspectives, and prospects",
+    "venue": "Science",
+    "year": 2015,
+    "referenceCount": 72,
+    "citationCount": 7408,
+    "openAccessPdf": {
+      "url": "",
+      "status": "CLOSED",
+      "license": null,
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1126/science.aaa8415?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1126/science.aaa8415, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Medicine"
+    ],
+    "authors": [
+      {
+        "authorId": "1694621",
+        "name": "Michael I. Jordan"
+      },
+      {
+        "authorId": "2066277988",
+        "name": "T. Mitchell"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "f156ecbbb9243522275490d698c6825f4d2e01af",
+    "url": "https://www.semanticscholar.org/paper/f156ecbbb9243522275490d698c6825f4d2e01af",
+    "title": "Explainable AI: A Review of Machine Learning Interpretability Methods",
+    "venue": "Entropy",
+    "year": 2020,
+    "referenceCount": 166,
+    "citationCount": 2208,
+    "openAccessPdf": {
+      "url": "https://www.mdpi.com/1099-4300/23/1/18/pdf?version=1609160444",
+      "status": "GOLD",
+      "license": "CCBY",
+      "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC7824368, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Medicine"
+    ],
+    "authors": [
+      {
+        "authorId": "1582428254",
+        "name": "Pantelis Linardatos"
+      },
+      {
+        "authorId": "1753333150",
+        "name": "Vasilis Papastefanopoulos"
+      },
+      {
+        "authorId": "1697867",
+        "name": "S. Kotsiantis"
+      }
+    ],
+    "abstract": "Recent advances in artificial intelligence (AI) have led to its widespread industrial adoption, with machine learning systems demonstrating superhuman performance in a significant number of tasks. However, this surge in performance, has often been achieved through increased model complexity, turning such systems into “black box” approaches and causing uncertainty regarding the way they operate and, ultimately, the way that they come to decisions. This ambiguity has made it problematic for machine learning systems to be adopted in sensitive yet critical domains, where their value could be immense, such as healthcare. As a result, scientific interest in the field of Explainable Artificial Intelligence (XAI), a field that is concerned with the development of new methods that explain and interpret machine learning models, has been tremendously reignited over recent years. This study focuses on machine learning interpretability methods; more specifically, a literature review and taxonomy of these methods are presented, as well as links to their programming implementations, in the hope that this survey would serve as a reference point for both theorists and practitioners."
+  },
+  {
+    "paperId": "53b047e503f4c24602f376a774d653f7ed56c024",
+    "url": "https://www.semanticscholar.org/paper/53b047e503f4c24602f376a774d653f7ed56c024",
+    "title": "Practical Black-Box Attacks against Machine Learning",
+    "venue": "ACM Asia Conference on Computer and Communications Security",
+    "year": 2016,
+    "referenceCount": 42,
+    "citationCount": 3816,
+    "openAccessPdf": {
+      "url": "http://arxiv.org/pdf/1602.02697",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1602.02697, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "2367796356",
+        "name": "Nicolas Papernot"
+      },
+      {
+        "authorId": "144061974",
+        "name": "P. Mcdaniel"
+      },
+      {
+        "authorId": "153440022",
+        "name": "I. Goodfellow"
+      },
+      {
+        "authorId": "1680133",
+        "name": "S. Jha"
+      },
+      {
+        "authorId": "144643812",
+        "name": "Z. B. Celik"
+      },
+      {
+        "authorId": "144231976",
+        "name": "A. Swami"
+      }
+    ],
+    "abstract": "Machine learning (ML) models, e.g., deep neural networks (DNNs), are vulnerable to adversarial examples: malicious inputs modified to yield erroneous model outputs, while appearing unmodified to human observers. Potential attacks include having malicious content like malware identified as legitimate or controlling vehicle behavior. Yet, all existing adversarial example attacks require knowledge of either the model internals or its training data. We introduce the first practical demonstration of an attacker controlling a remotely hosted DNN with no such knowledge. Indeed, the only capability of our black-box adversary is to observe labels given by the DNN to chosen inputs. Our attack strategy consists in training a local model to substitute for the target DNN, using inputs synthetically generated by an adversary and labeled by the target DNN. We use the local substitute to craft adversarial examples, and find that they are misclassified by the targeted DNN. To perform a real-world and properly-blinded evaluation, we attack a DNN hosted by MetaMind, an online deep learning API. We find that their DNN misclassifies 84.24% of the adversarial examples crafted with our substitute. We demonstrate the general applicability of our strategy to many ML techniques by conducting the same attack against models hosted by Amazon and Google, using logistic regression substitutes. They yield adversarial examples misclassified by Amazon and Google at rates of 96.19% and 88.94%. We also find that this black-box attack strategy is capable of evading defense strategies previously found to make adversarial example crafting harder."
+  },
+  {
+    "paperId": "b0c34618ffd1154f35863e2ce7250ac6b6f2c424",
+    "url": "https://www.semanticscholar.org/paper/b0c34618ffd1154f35863e2ce7250ac6b6f2c424",
+    "title": "Interpretable Machine Learning",
+    "venue": "Hands-On Machine Learning with R",
+    "year": 2019,
+    "referenceCount": 165,
+    "citationCount": 2837,
+    "openAccessPdf": {
+      "url": "https://openresearch.surrey.ac.uk/view/delivery/44SUR_INST/12184120880002346/13184120870002346",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1201/9780367816377-16?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1201/9780367816377-16, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "46216076",
+        "name": "Bradley C. Boehmke"
+      },
+      {
+        "authorId": "35664117",
+        "name": "Brandon M. Greenwell"
+      }
+    ],
+    "abstract": "Interpretable machine learning has become a popular research direction as deep neural networks (DNNs) have become more powerful and their applications more mainstream, yet DNNs remain difficult to understand. Testing with Concept Activation Vectors, TCAV, (Kim et al. 2017) is an approach to interpreting DNNs in a human-friendly way and has recently received significant attention in the machine learning community. The TCAV algorithm achieves a degree of global interpretability for DNNs through human-defined concepts as explanations. This project introduces Robust TCAV, which builds on TCAV and experimentally determines best practices for this method. The objectives for Robust TCAV are 1) Making TCAV more consistent by reducing variance in the TCAV score distribution and 2) Increasing CAV and TCAV score resistance to perturbations. A difference of means method for CAV generation was determined to be the best practice to achieve both objectives. Many areas of the TCAV process are explored including CAV visualization in low dimensions, negative class selection, and activation perturbation in the direction of a CAV. Finally, a thresholding technique is considered to remove noise in TCAV scores. This project is a step in the direction of making TCAV, an already impactful algorithm in interpretability, more reliable and useful for practitioners."
+  },
+  {
+    "paperId": "807c1f19047f96083e13614f7ce20f2ac98c239a",
+    "url": "https://www.semanticscholar.org/paper/807c1f19047f96083e13614f7ce20f2ac98c239a",
+    "title": "C4.5: Programs for Machine Learning",
+    "venue": "",
+    "year": 1992,
+    "referenceCount": 0,
+    "citationCount": 24391,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "145341779",
+        "name": "J. R. Quinlan"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "9e27190f2d9b2167d4a66b88696def4585072fd5",
+    "url": "https://www.semanticscholar.org/paper/9e27190f2d9b2167d4a66b88696def4585072fd5",
+    "title": "SoilGrids250m: Global gridded soil information based on machine learning",
+    "venue": "PLoS ONE",
+    "year": 2017,
+    "referenceCount": 109,
+    "citationCount": 3242,
+    "openAccessPdf": {
+      "url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0169748&type=printable",
+      "status": "GOLD",
+      "license": "CCBY",
+      "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC5313206, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Medicine",
+      "Environmental Science"
+    ],
+    "authors": [
+      {
+        "authorId": "2856207",
+        "name": "T. Hengl"
+      },
+      {
+        "authorId": "7549589",
+        "name": "Jorge Mendes de Jesus"
+      },
+      {
+        "authorId": "145253407",
+        "name": "G. Heuvelink"
+      },
+      {
+        "authorId": "9583743",
+        "name": "Maria Ruiperez González"
+      },
+      {
+        "authorId": "30504500",
+        "name": "M. Kilibarda"
+      },
+      {
+        "authorId": "9030720",
+        "name": "Aleksandar Blagotić"
+      },
+      {
+        "authorId": "2228185935",
+        "name": "Shangguan Wei"
+      },
+      {
+        "authorId": "3376186",
+        "name": "Marvin N. Wright"
+      },
+      {
+        "authorId": "3018223",
+        "name": "X. Geng"
+      },
+      {
+        "authorId": "1402912902",
+        "name": "B. Bauer-Marschallinger"
+      },
+      {
+        "authorId": "145669099",
+        "name": "M. Guevara"
+      },
+      {
+        "authorId": "145632581",
+        "name": "R. Vargas"
+      },
+      {
+        "authorId": "145028966",
+        "name": "R. MacMillan"
+      },
+      {
+        "authorId": "49399380",
+        "name": "N. Batjes"
+      },
+      {
+        "authorId": "100653750",
+        "name": "J. Leenaars"
+      },
+      {
+        "authorId": "32830771",
+        "name": "E. Ribeiro"
+      },
+      {
+        "authorId": "2924968",
+        "name": "Ichsani Wheeler"
+      },
+      {
+        "authorId": "2146245",
+        "name": "S. Mantel"
+      },
+      {
+        "authorId": "4953836",
+        "name": "B. Kempen"
+      }
+    ],
+    "abstract": "This paper describes the technical development and accuracy assessment of the most recent and improved version of the SoilGrids system at 250m resolution (June 2016 update). SoilGrids provides global predictions for standard numeric soil properties (organic carbon, bulk density, Cation Exchange Capacity (CEC), pH, soil texture fractions and coarse fragments) at seven standard depths (0, 5, 15, 30, 60, 100 and 200 cm), in addition to predictions of depth to bedrock and distribution of soil classes based on the World Reference Base (WRB) and USDA classification systems (ca. 280 raster layers in total). Predictions were based on ca. 150,000 soil profiles used for training and a stack of 158 remote sensing-based soil covariates (primarily derived from MODIS land products, SRTM DEM derivatives, climatic images and global landform and lithology maps), which were used to fit an ensemble of machine learning methods—random forest and gradient boosting and/or multinomial logistic regression—as implemented in the R packages ranger, xgboost, nnet and caret. The results of 10–fold cross-validation show that the ensemble models explain between 56% (coarse fragments) and 83% (pH) of variation with an overall average of 61%. Improvements in the relative accuracy considering the amount of variation explained, in comparison to the previous version of SoilGrids at 1 km spatial resolution, range from 60 to 230%. Improvements can be attributed to: (1) the use of machine learning instead of linear regression, (2) to considerable investments in preparing finer resolution covariate layers and (3) to insertion of additional soil profiles. Further development of SoilGrids could include refinement of methods to incorporate input uncertainties and derivation of posterior probability distributions (per pixel), and further automation of spatial modeling so that soil maps can be generated for potentially hundreds of soil variables. Another area of future research is the development of methods for multiscale merging of SoilGrids predictions with local and/or national gridded soil products (e.g. up to 50 m spatial resolution) so that increasingly more accurate, complete and consistent global soil information can be produced. SoilGrids are available under the Open Data Base License."
+  },
+  {
+    "paperId": "730ca170962a58607e092035beb2afc4b5fa6242",
+    "url": "https://www.semanticscholar.org/paper/730ca170962a58607e092035beb2afc4b5fa6242",
+    "title": "Data Mining Practical Machine Learning Tools and Techniques",
+    "venue": "",
+    "year": 2014,
+    "referenceCount": 0,
+    "citationCount": 17553,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "71619391",
+        "name": "อนิรุธ สืบสิงห์"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "360ca02e6f5a5e1af3dce4866a257aafc2d6d6f5",
+    "url": "https://www.semanticscholar.org/paper/360ca02e6f5a5e1af3dce4866a257aafc2d6d6f5",
+    "title": "Machine learning - a probabilistic perspective",
+    "venue": "Adaptive computation and machine learning series",
+    "year": 2012,
+    "referenceCount": 0,
+    "citationCount": 9826,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "2056417995",
+        "name": "Kevin P. Murphy"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "e2a85a6766b982ff7c8980e57ca6342d22493827",
+    "url": "https://www.semanticscholar.org/paper/e2a85a6766b982ff7c8980e57ca6342d22493827",
+    "title": "Adversarial Machine Learning at Scale",
+    "venue": "International Conference on Learning Representations",
+    "year": 2016,
+    "referenceCount": 22,
+    "citationCount": 3285,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1611.01236, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "145714153",
+        "name": "Alexey Kurakin"
+      },
+      {
+        "authorId": "153440022",
+        "name": "I. Goodfellow"
+      },
+      {
+        "authorId": "1751569",
+        "name": "Samy Bengio"
+      }
+    ],
+    "abstract": "Adversarial examples are malicious inputs designed to fool machine learning models. They often transfer from one model to another, allowing attackers to mount black box attacks without knowledge of the target model's parameters. Adversarial training is the process of explicitly training a model on adversarial examples, in order to make it more robust to attack or to reduce its test error on clean inputs. So far, adversarial training has primarily been applied to small problems. In this research, we apply adversarial training to ImageNet. Our contributions include: (1) recommendations for how to succesfully scale adversarial training to large models and datasets, (2) the observation that adversarial training confers robustness to single-step attack methods, (3) the finding that multi-step attack methods are somewhat less transferable than single-step attack methods, so single-step attacks are the best for mounting black-box attacks, and (4) resolution of a \"label leaking\" effect that causes adversarially trained models to perform better on adversarial examples than on clean examples, because the adversarial example construction process uses the true label and the model can learn to exploit regularities in the construction process."
+  },
+  {
+    "paperId": "d21703674ae562bae4a849a75847cdd9ead417df",
+    "url": "https://www.semanticscholar.org/paper/d21703674ae562bae4a849a75847cdd9ead417df",
+    "title": "Optimization Methods for Large-Scale Machine Learning",
+    "venue": "SIAM Review",
+    "year": 2016,
+    "referenceCount": 181,
+    "citationCount": 3449,
+    "openAccessPdf": {
+      "url": "https://arxiv.org/pdf/1606.04838",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1606.04838, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "52184096",
+        "name": "L. Bottou"
+      },
+      {
+        "authorId": "2198436",
+        "name": "Frank E. Curtis"
+      },
+      {
+        "authorId": "2784955",
+        "name": "J. Nocedal"
+      }
+    ],
+    "abstract": "This paper provides a review and commentary on the past, present, and future of numerical optimization algorithms in the context of machine learning applications. Through case studies on text classification and the training of deep neural networks, we discuss how optimization problems arise in machine learning and what makes them challenging. A major theme of our study is that large-scale machine learning represents a distinctive setting in which the stochastic gradient (SG) method has traditionally played a central role while conventional gradient-based nonlinear optimization techniques typically falter. Based on this viewpoint, we present a comprehensive theory of a straightforward, yet versatile SG algorithm, discuss its practical behavior, and highlight opportunities for designing algorithms with improved performance. This leads to a discussion about the next generation of optimization methods for large-scale machine learning, including an investigation of two main streams of research on techniques that diminish noise in the stochastic directions and methods that make use of second-order derivative approximations."
+  },
+  {
+    "paperId": "554894f70b28dba58b396c2d84080ac01051261b",
+    "url": "https://www.semanticscholar.org/paper/554894f70b28dba58b396c2d84080ac01051261b",
+    "title": "Gaussian Processes For Machine Learning",
+    "venue": "International Journal of Neural Systems",
+    "year": 2004,
+    "referenceCount": 87,
+    "citationCount": 15616,
+    "openAccessPdf": {
+      "url": "https://infoscience.epfl.ch/record/161301/files/bayesgp-tut.pdf",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1142/S0129065704001899?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1142/S0129065704001899, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Medicine",
+      "Mathematics"
+    ],
+    "authors": [
+      {
+        "authorId": "2389576016",
+        "name": "Matthias W. Seeger"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "5d433da6d0f143f20936379910104d2bb139d4ae",
+    "url": "https://www.semanticscholar.org/paper/5d433da6d0f143f20936379910104d2bb139d4ae",
+    "title": "ilastik: interactive machine learning for (bio)image analysis",
+    "venue": "Nature Methods",
+    "year": 2019,
+    "referenceCount": 45,
+    "citationCount": 2521,
+    "openAccessPdf": {
+      "url": "http://archiv.ub.uni-heidelberg.de/volltextserver/28283/7/Berg_ilastik_2020.pdf",
+      "status": "GREEN",
+      "license": "other-oa",
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1038/s41592-019-0582-9?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1038/s41592-019-0582-9, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Medicine",
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "48275624",
+        "name": "S. Berg"
+      },
+      {
+        "authorId": "145708428",
+        "name": "D. Kutra"
+      },
+      {
+        "authorId": "2066522012",
+        "name": "Thorben Kroeger"
+      },
+      {
+        "authorId": "145486652",
+        "name": "C. Straehle"
+      },
+      {
+        "authorId": "2834950",
+        "name": "Bernhard X. Kausler"
+      },
+      {
+        "authorId": "2057581",
+        "name": "Carsten Haubold"
+      },
+      {
+        "authorId": "1725192",
+        "name": "Martin Schiegg"
+      },
+      {
+        "authorId": "144560453",
+        "name": "J. Ales"
+      },
+      {
+        "authorId": "46478540",
+        "name": "T. Beier"
+      },
+      {
+        "authorId": "1391661732",
+        "name": "Markus Rudy"
+      },
+      {
+        "authorId": "47829712",
+        "name": "Kemal Eren"
+      },
+      {
+        "authorId": "2062532551",
+        "name": "Jaime I Cervantes"
+      },
+      {
+        "authorId": "1968352",
+        "name": "Buote Xu"
+      },
+      {
+        "authorId": "1397152727",
+        "name": "Fynn Beuttenmueller"
+      },
+      {
+        "authorId": "67091521",
+        "name": "A. Wolny"
+      },
+      {
+        "authorId": "2111387698",
+        "name": "Chong Zhang"
+      },
+      {
+        "authorId": "1708103",
+        "name": "U. Köthe"
+      },
+      {
+        "authorId": "1685187",
+        "name": "F. Hamprecht"
+      },
+      {
+        "authorId": "3190177",
+        "name": "A. Kreshuk"
+      }
+    ],
+    "abstract": null
+  },
+  {
+    "paperId": "56e8863838b4dcc4790108cd1e7e680a104a7c30",
+    "url": "https://www.semanticscholar.org/paper/56e8863838b4dcc4790108cd1e7e680a104a7c30",
+    "title": "Machine Learning Algorithms: A Review",
+    "venue": "International Journal of Science and Research (IJSR)",
+    "year": 2022,
+    "referenceCount": 27,
+    "citationCount": 1847,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.21275/sr22815163219?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.21275/sr22815163219, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "50349508",
+        "name": "Ayon Dey"
+      }
+    ],
+    "abstract": "."
+  },
+  {
+    "paperId": "6bc4b1376ec2812b6d752c4f6bc8d8fd0512db91",
+    "url": "https://www.semanticscholar.org/paper/6bc4b1376ec2812b6d752c4f6bc8d8fd0512db91",
+    "title": "Multimodal Machine Learning: A Survey and Taxonomy",
+    "venue": "IEEE Transactions on Pattern Analysis and Machine Intelligence",
+    "year": 2017,
+    "referenceCount": 273,
+    "citationCount": 3363,
+    "openAccessPdf": {
+      "url": "http://arxiv.org/pdf/1705.09406",
+      "status": "GREEN",
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1705.09406, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science",
+      "Medicine"
+    ],
+    "authors": [
+      {
+        "authorId": "1756344",
+        "name": "T. Baltrušaitis"
+      },
+      {
+        "authorId": "118242121",
+        "name": "Chaitanya Ahuja"
+      },
+      {
+        "authorId": "49933077",
+        "name": "Louis-philippe Morency"
+      }
+    ],
+    "abstract": "Our experience of the world is multimodal - we see objects, hear sounds, feel texture, smell odors, and taste flavors. Modality refers to the way in which something happens or is experienced and a research problem is characterized as multimodal when it includes multiple such modalities. In order for Artificial Intelligence to make progress in understanding the world around us, it needs to be able to interpret such multimodal signals together. Multimodal machine learning aims to build models that can process and relate information from multiple modalities. It is a vibrant multi-disciplinary field of increasing importance and with extraordinary potential. Instead of focusing on specific multimodal applications, this paper surveys the recent advances in multimodal machine learning itself and presents them in a common taxonomy. We go beyond the typical early and late fusion categorization and identify broader challenges that are faced by multimodal machine learning, namely: representation, translation, alignment, fusion, and co-learning. This new taxonomy will enable researchers to better understand the state of the field and identify directions for future research."
+  },
+  {
+    "paperId": "2e2089ae76fe914706e6fa90081a79c8fe01611e",
+    "url": "https://www.semanticscholar.org/paper/2e2089ae76fe914706e6fa90081a79c8fe01611e",
+    "title": "Practical Bayesian Optimization of Machine Learning Algorithms",
+    "venue": "Neural Information Processing Systems",
+    "year": 2012,
+    "referenceCount": 28,
+    "citationCount": 8553,
+    "openAccessPdf": {
+      "url": "",
+      "status": null,
+      "license": null,
+      "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/1206.2944, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Mathematics",
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "144108062",
+        "name": "Jasper Snoek"
+      },
+      {
+        "authorId": "1777528",
+        "name": "H. Larochelle"
+      },
+      {
+        "authorId": "1722180",
+        "name": "Ryan P. Adams"
+      }
+    ],
+    "abstract": "The use of machine learning algorithms frequently involves careful tuning of learning parameters and model hyperparameters. Unfortunately, this tuning is often a \"black art\" requiring expert experience, rules of thumb, or sometimes brute-force search. There is therefore great appeal for automatic approaches that can optimize the performance of any given learning algorithm to the problem at hand. In this work, we consider this problem through the framework of Bayesian optimization, in which a learning algorithm's generalization performance is modeled as a sample from a Gaussian process (GP). We show that certain choices for the nature of the GP, such as the type of kernel and the treatment of its hyperparameters, can play a crucial role in obtaining a good optimizer that can achieve expertlevel performance. We describe new algorithms that take into account the variable cost (duration) of learning algorithm experiments and that can leverage the presence of multiple cores for parallel experimentation. We show that these proposed algorithms improve on previous automatic procedures and can reach or surpass human expert-level optimization for many algorithms including latent Dirichlet allocation, structured SVMs and convolutional neural networks."
+  },
+  {
+    "paperId": "2e62d1345b340d5fda3b092c460264b9543bc4b5",
+    "url": "https://www.semanticscholar.org/paper/2e62d1345b340d5fda3b092c460264b9543bc4b5",
+    "title": "Genetic Algorithms in Search Optimization and Machine Learning",
+    "venue": "",
+    "year": 1988,
+    "referenceCount": 1,
+    "citationCount": 60909,
+    "openAccessPdf": {
+      "url": "",
+      "status": "CLOSED",
+      "license": null,
+      "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.5860/choice.27-0936?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.5860/choice.27-0936, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+    },
+    "fieldsOfStudy": [
+      "Computer Science"
+    ],
+    "authors": [
+      {
+        "authorId": "1715339",
+        "name": "D. Goldberg"
+      }
+    ],
+    "abstract": null
+  }
+]

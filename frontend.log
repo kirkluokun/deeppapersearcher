@@ -1,0 +1,10 @@
+
+> arxiv-paper-searcher-frontend@1.0.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v4.5.14  ready in 382 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.50.105:3000/
+  ➜  Network: http://198.18.0.1:3000/

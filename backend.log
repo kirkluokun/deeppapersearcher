@@ -1,0 +1,29 @@
+INFO:     Started server process [85424]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:52073 - "POST /api/search HTTP/1.1" 200 OK
+INFO:__main__:发送初始状态: {"type": "status", "message": "开始搜索 arXiv 论文...", "progress": 0}
+INFO:arxiv.arxiv:Requesting 30 results at offset 0
+INFO:arxiv.arxiv:Requesting page of results
+INFO:arxiv.arxiv:Got first page; 30 of 30 results available
+INFO:__main__:发送状态1: {"type": "status", "message": "找到 30 篇论文，开始筛选...", "progress": 10}
+INFO:__main__:发送进度: 1/15, progress=34
+INFO:__main__:发送进度: 2/15, progress=38
+INFO:__main__:发送进度: 3/15, progress=42
+INFO:__main__:发送进度: 4/15, progress=46
+INFO:__main__:发送进度: 5/15, progress=50
+INFO:__main__:发送进度: 6/15, progress=54
+INFO:__main__:发送进度: 7/15, progress=58
+INFO:__main__:发送进度: 8/15, progress=62
+INFO:__main__:发送进度: 9/15, progress=66
+INFO:__main__:发送进度: 10/15, progress=70
+INFO:__main__:发送进度: 11/15, progress=74
+INFO:__main__:发送进度: 12/15, progress=78
+INFO:__main__:发送进度: 13/15, progress=82
+INFO:__main__:发送进度: 14/15, progress=86
+INFO:__main__:发送进度: 15/15, progress=90
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [85424]
