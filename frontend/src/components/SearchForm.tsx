@@ -5,18 +5,33 @@
 import React, { useState } from 'react';
 
 interface SearchFormProps {
-  onSearch: (keywords: string, question: string) => void;
+  onSearch: (keywords: string, question: string, engines: string[]) => void;
   loading: boolean;
 }
 
 export default function SearchForm({ onSearch, loading }: SearchFormProps) {
   const [keywords, setKeywords] = useState('');
   const [question, setQuestion] = useState('');
+  const [engines, setEngines] = useState<string[]>(['arxiv']);  // 默认选择 arxiv
+
+  const handleEngineChange = (engine: string) => {
+    setEngines(prev => {
+      if (prev.includes(engine)) {
+        // 至少保留一个引擎
+        if (prev.length > 1) {
+          return prev.filter(e => e !== engine);
+        }
+        return prev;
+      } else {
+        return [...prev, engine];
+      }
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (keywords.trim() && question.trim()) {
-      onSearch(keywords.trim(), question.trim());
+    if (keywords.trim() && question.trim() && engines.length > 0) {
+      onSearch(keywords.trim(), question.trim(), engines);
     }
   };
 
@@ -48,12 +63,38 @@ export default function SearchForm({ onSearch, loading }: SearchFormProps) {
         />
       </div>
       
+      <div style={styles.inputGroup}>
+        <label style={styles.label}>选择搜索引擎:</label>
+        <div style={styles.checkboxGroup}>
+          <label style={styles.checkboxLabel}>
+            <input
+              type="checkbox"
+              checked={engines.includes('arxiv')}
+              onChange={() => handleEngineChange('arxiv')}
+              disabled={loading}
+              style={styles.checkbox}
+            />
+            arXiv
+          </label>
+          <label style={styles.checkboxLabel}>
+            <input
+              type="checkbox"
+              checked={engines.includes('semantic_scholar')}
+              onChange={() => handleEngineChange('semantic_scholar')}
+              disabled={loading}
+              style={styles.checkbox}
+            />
+            Semantic Scholar
+          </label>
+        </div>
+      </div>
+      
       <button
         type="submit"
-        disabled={loading || !keywords.trim() || !question.trim()}
+        disabled={loading || !keywords.trim() || !question.trim() || engines.length === 0}
         style={{
           ...styles.button,
-          ...(loading || !keywords.trim() || !question.trim() ? styles.buttonDisabled : {}),
+          ...(loading || !keywords.trim() || !question.trim() || engines.length === 0 ? styles.buttonDisabled : {}),
         }}
       >
         {loading ? '搜索中...' : '搜索论文'}
@@ -95,6 +136,23 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: '14px',
     fontFamily: 'inherit',
     resize: 'vertical',
+  },
+  checkboxGroup: {
+    display: 'flex',
+    gap: '20px',
+    flexWrap: 'wrap',
+  },
+  checkboxLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  checkbox: {
+    marginRight: '8px',
+    width: '18px',
+    height: '18px',
+    cursor: 'pointer',
   },
   button: {
     width: '100%',

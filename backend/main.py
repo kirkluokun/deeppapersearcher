@@ -5,13 +5,12 @@ FastAPI 主服务
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict
 import logging
-import json
 
-from arxiv_search import search_papers
+from arxiv_search import search_papers as search_arxiv_papers
+from semantic_scholar_search import search_papers as search_semantic_scholar_papers
 from llm_filter import filter_papers
 from translate_extract import translate_and_extract_keywords
 
@@ -36,6 +35,7 @@ app.add_middleware(
 class SearchRequest(BaseModel):
     keywords: str
     question: str
+    engines: List[str] = ["arxiv"]  # 默认只使用 arxiv，可选: ["arxiv", "semantic_scholar"]
 
 
 # 响应模型
@@ -45,10 +45,12 @@ class PaperResponse(BaseModel):
     abstract_zh: str  # 中文摘要
     keywords: str  # 关键词（中文）
     relevance_summary: str  # 相关性评估概述
-    arxiv_id: str
-    url: str
+    arxiv_id: str  # 论文 ID（arxiv_id 或 paper_id）
+    url: str  # 网页链接
+    pdf_url: str | None = None  # PDF 下载链接（可选）
     authors: List[str]
     published: str | None
+    source: str  # 来源：arxiv 或 semantic_scholar
 
 
 class SearchResponse(BaseModel):
@@ -62,48 +64,49 @@ async def root():
     return {"message": "arXiv 论文检索系统 API"}
 
 
-async def process_search_with_progress(request: SearchRequest):
-    """处理搜索请求并推送进度"""
+def process_search(request: SearchRequest) -> SearchResponse:
+    """处理搜索请求"""
     try:
-        # 发送初始状态
-        initial_data = json.dumps({'type': 'status', 'message': '开始搜索 arXiv 论文...', 'progress': 0}, ensure_ascii=False)
-        logger.info(f"发送初始状态: {initial_data}")
-        yield f"data: {initial_data}\n\n"
+        # 验证引擎选择
+        valid_engines = ["arxiv", "semantic_scholar"]
+        engines = [e for e in request.engines if e in valid_engines]
+        if not engines:
+            engines = ["arxiv"]  # 默认使用 arxiv
         
-        # 1. 搜索论文
-        papers = search_papers(request.keywords)
-        status_data = json.dumps({
-            'type': 'status',
-            'message': f'找到 {len(papers)} 篇论文，开始筛选...',
-            'progress': 10
-        }, ensure_ascii=False)
-        logger.info(f"发送状态1: {status_data}")
-        yield f"data: {status_data}\n\n"
+        # 1. 搜索论文（多引擎）
+        all_papers = []
         
-        if not papers:
-            complete_data = json.dumps({'type': 'complete', 'papers': [], 'total': 0}, ensure_ascii=False)
-            yield f"data: {complete_data}\n\n"
-            return
+        if "arxiv" in engines:
+            try:
+                arxiv_papers = search_arxiv_papers(request.keywords)
+                all_papers.extend(arxiv_papers)
+                logger.info(f"arXiv 找到 {len(arxiv_papers)} 篇论文")
+            except Exception as e:
+                logger.error(f"arXiv 搜索失败: {str(e)}")
+        
+        if "semantic_scholar" in engines:
+            try:
+                ss_papers = search_semantic_scholar_papers(request.keywords)
+                all_papers.extend(ss_papers)
+                logger.info(f"Semantic Scholar 找到 {len(ss_papers)} 篇论文")
+            except Exception as e:
+                logger.error(f"Semantic Scholar 搜索失败: {str(e)}")
+        
+        if not all_papers:
+            return SearchResponse(papers=[], total=0)
         
         # 2. 使用 LLM 筛选论文
         filtered_papers = filter_papers(
             keywords=request.keywords,
             question=request.question,
-            papers=papers
+            papers=all_papers
         )
-        status_data2 = json.dumps({
-            'type': 'status',
-            'message': f'筛选完成，剩余 {len(filtered_papers)} 篇，开始翻译和理解...',
-            'progress': 30
-        }, ensure_ascii=False)
-        yield f"data: {status_data2}\n\n"
         
-        # 3. 翻译摘要并提取关键词（并发处理，带进度）
+        # 3. 翻译摘要并提取关键词（并发处理）
         from concurrent.futures import ThreadPoolExecutor, as_completed
         
         total = len(filtered_papers)
         processed_papers = [None] * total  # 预分配列表保持顺序
-        completed_count = 0
         
         def process_single_paper(index: int, paper: Dict):
             """处理单篇论文"""
@@ -115,16 +118,17 @@ async def process_search_with_progress(request: SearchRequest):
                     "keywords": result["keywords"],
                     "relevance_summary": result["relevance_summary"]
                 }
-                return ('success', index, paper_with_translation, paper['title'])
+                return index, paper_with_translation
             except Exception as e:
-                logger.warning(f"处理论文 {paper.get('arxiv_id', 'unknown')} 失败: {str(e)}")
+                paper_id = paper.get('arxiv_id') or paper.get('paper_id', 'unknown')
+                logger.warning(f"处理论文 {paper_id} 失败: {str(e)}")
                 paper_with_translation = {
                     **paper,
-                    "abstract_zh": paper.get("abstract", ""),
+                    "abstract_zh": paper.get("abstract", "") or "(Semantic Scholar 数据源中未提供摘要)",
                     "keywords": "",
                     "relevance_summary": ""
                 }
-                return ('success', index, paper_with_translation, paper['title'])
+                return index, paper_with_translation
         
         # 使用线程池并发处理（最多5个并发，避免API限制）
         with ThreadPoolExecutor(max_workers=5) as executor:
@@ -134,23 +138,11 @@ async def process_search_with_progress(request: SearchRequest):
                 for i, paper in enumerate(filtered_papers)
             }
             
-            # 收集结果并发送进度（使用 as_completed 确保所有任务完成）
+            # 收集结果（使用 as_completed 确保所有任务完成）
             for future in as_completed(future_to_index):
                 try:
-                    event_type, index, paper_result, paper_title = future.result()
-                    if event_type == 'success':
-                        processed_papers[index] = paper_result
-                        completed_count += 1
-                        progress = 30 + int((completed_count / total) * 60)
-                        progress_data = json.dumps({
-                            'type': 'progress',
-                            'current': completed_count,
-                            'total': total,
-                            'paper_title': paper_title[:50] if paper_title else '',
-                            'progress': progress
-                        }, ensure_ascii=False)
-                        logger.info(f"发送进度: {completed_count}/{total}, progress={progress}")
-                        yield f"data: {progress_data}\n\n"
+                    index, paper_result = future.result()
+                    processed_papers[index] = paper_result
                 except Exception as e:
                     logger.error(f"任务执行失败: {str(e)}")
                     # 处理失败的任务
@@ -158,71 +150,58 @@ async def process_search_with_progress(request: SearchRequest):
                     paper = filtered_papers[index]
                     processed_papers[index] = {
                         **paper,
-                        "abstract_zh": paper.get("abstract", ""),
+                        "abstract_zh": paper.get("abstract", "") or "(Semantic Scholar 数据源中未提供摘要)",
                         "keywords": "",
                         "relevance_summary": ""
                     }
-                    completed_count += 1
-                    progress = 30 + int((completed_count / total) * 60)
-                    error_progress_data = json.dumps({
-                        'type': 'progress',
-                        'current': completed_count,
-                        'total': total,
-                        'paper_title': paper.get('title', '')[:50] if paper.get('title') else '',
-                        'progress': progress
-                    }, ensure_ascii=False)
-                    yield f"data: {error_progress_data}\n\n"
         
         # 4. 转换为响应格式
-        paper_responses = [
-            PaperResponse(
-                title=paper["title"],
-                abstract=paper["abstract"],
-                abstract_zh=paper.get("abstract_zh", paper["abstract"]),
+        paper_responses = []
+        for paper in processed_papers:
+            # 处理可能缺失的字段
+            abstract = paper.get("abstract", "")
+            abstract_zh = paper.get("abstract_zh", "")
+            
+            # 如果没有摘要，使用提示文本
+            if not abstract:
+                abstract = "(Semantic Scholar 数据源中未提供摘要)"
+            if not abstract_zh and abstract:
+                abstract_zh = abstract
+            
+            paper_response = PaperResponse(
+                title=paper.get("title", ""),
+                abstract=abstract,
+                abstract_zh=abstract_zh,
                 keywords=paper.get("keywords", ""),
                 relevance_summary=paper.get("relevance_summary", ""),
-                arxiv_id=paper["arxiv_id"],
-                url=paper["url"],
-                authors=paper["authors"],
-                published=paper["published"]
+                arxiv_id=paper.get("arxiv_id") or paper.get("paper_id", ""),
+                url=paper.get("url", ""),
+                pdf_url=paper.get("pdf_url"),
+                authors=paper.get("authors", []),
+                published=paper.get("published"),
+                source=paper.get("source", "unknown")
             )
-            for paper in processed_papers
-        ]
+            paper_responses.append(paper_response)
         
-        # 发送完成
-        complete_data = json.dumps({
-            'type': 'complete',
-            'papers': [p.model_dump() for p in paper_responses],
-            'total': len(paper_responses)
-        }, ensure_ascii=False)
-        yield f"data: {complete_data}\n\n"
+        return SearchResponse(papers=paper_responses, total=len(paper_responses))
         
     except Exception as e:
         logger.error(f"搜索失败: {str(e)}")
-        error_data = json.dumps({'type': 'error', 'message': str(e)}, ensure_ascii=False)
-        yield f"data: {error_data}\n\n"
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/api/search")
+@app.post("/api/search", response_model=SearchResponse)
 async def search_papers_api(request: SearchRequest):
     """
-    搜索并筛选论文（使用 SSE 推送进度）
+    搜索并筛选论文
     
     Args:
         request: 包含关键词和问题的请求
         
     Returns:
-        SSE 流，包含进度和最终结果
+        论文列表和总数
     """
-    return StreamingResponse(
-        process_search_with_progress(request),
-        media_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "X-Accel-Buffering": "no"
-        }
-    )
+    return process_search(request)
 
 
 if __name__ == "__main__":

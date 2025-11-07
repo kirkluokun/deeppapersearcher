@@ -44,13 +44,19 @@ def search_papers(keywords: str) -> List[Dict]:
         papers = []
         # 使用自定义 Client 执行搜索
         for result in client.results(search):
+            arxiv_id = result.entry_id.split("/")[-1]  # 提取 arXiv ID
+            # arXiv PDF URL 格式: https://arxiv.org/pdf/{arxiv_id}.pdf
+            pdf_url = f"https://arxiv.org/pdf/{arxiv_id}.pdf"
+            
             paper_info = {
                 "title": result.title,
                 "abstract": result.summary,
-                "arxiv_id": result.entry_id.split("/")[-1],  # 提取 arXiv ID
-                "url": result.entry_id,  # arXiv URL
+                "arxiv_id": arxiv_id,
+                "url": result.entry_id,  # arXiv 网页 URL
+                "pdf_url": pdf_url,  # arXiv PDF 下载链接
                 "authors": [author.name for author in result.authors],
                 "published": result.published.strftime("%Y-%m-%d") if result.published else None,
+                "source": "arxiv"  # 标记来源
             }
             papers.append(paper_info)
         

@@ -53,9 +53,15 @@ function PaperItem({
           
           <div style={styles.abstractSection}>
             <p style={styles.abstractLabel}>摘要:</p>
-            <p style={styles.abstractZh}>
-              {paper.abstract_zh || paper.abstract}
-            </p>
+            {paper.abstract && paper.abstract !== "(Semantic Scholar 数据源中未提供摘要)" ? (
+              <p style={styles.abstractZh}>
+                {paper.abstract_zh || paper.abstract}
+              </p>
+            ) : (
+              <p style={styles.noAbstract}>
+                (Semantic Scholar 数据源中未提供摘要)
+              </p>
+            )}
           </div>
           
           {hasEnglish && (
@@ -85,9 +91,54 @@ function PaperItem({
             )}
             {paper.authors.length > 0 && (
               <span style={styles.metaItem}>
-                作者: {paper.authors.slice(0, 3).join(', ')}
-                {paper.authors.length > 3 && '...'}
+                作者: {paper.authors.join(', ')}
               </span>
+            )}
+            {paper.source && (
+              <span style={styles.metaItem}>
+                来源: {paper.source === 'arxiv' ? 'arXiv' : 'Semantic Scholar'}
+              </span>
+            )}
+          </div>
+          
+          <div style={styles.links}>
+            {paper.url && (
+              <a
+                href={paper.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.link}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#007bff';
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#007bff';
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                📄 查看论文页面
+              </a>
+            )}
+            {paper.pdf_url && (
+              <a
+                href={paper.pdf_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.link}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#007bff';
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#007bff';
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                📥 下载 PDF
+              </a>
             )}
           </div>
         </div>
@@ -292,5 +343,27 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '40px',
     color: '#999',
     fontSize: '16px',
+  },
+  noAbstract: {
+    fontSize: '14px',
+    color: '#999',
+    fontStyle: 'italic',
+    marginBottom: '0',
+  },
+  links: {
+    display: 'flex',
+    gap: '15px',
+    marginTop: '15px',
+    flexWrap: 'wrap',
+  },
+  link: {
+    color: '#007bff',
+    textDecoration: 'none',
+    fontSize: '14px',
+    padding: '6px 12px',
+    border: '1px solid #007bff',
+    borderRadius: '4px',
+    transition: 'all 0.2s',
+    display: 'inline-block',
   },
 };

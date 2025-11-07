@@ -2,77 +2,32 @@
  * 主应用组件
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import SearchForm from './components/SearchForm';
 import PaperList from './components/PaperList';
 import CopyButton from './components/CopyButton';
-import ProgressBar from './components/ProgressBar';
-import { searchPapersWithProgress, Paper, ProgressEvent } from './services/api';
+import { searchPapers, Paper } from './services/api';
 
 function App() {
   const [papers, setPapers] = useState<Paper[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [progressMessage, setProgressMessage] = useState('');
-  const [currentPaper, setCurrentPaper] = useState<{ current: number; total: number; title: string } | null>(null);
-  const abortRef = useRef<(() => void) | null>(null);
 
-  const handleSearch = (keywords: string, question: string) => {
+  const handleSearch = async (keywords: string, question: string, engines: string[]) => {
     setLoading(true);
     setError(null);
     setPapers([]);
     setSelectedIds(new Set());
-    setProgress(0);
-    setProgressMessage('开始搜索...');
-    setCurrentPaper(null);
 
-    const cancel = searchPapersWithProgress(
-      { keywords, question },
-      (event: ProgressEvent) => {
-        console.log('Progress event received:', event); // 调试日志
-        
-        // 确保状态更新使用函数式更新，避免闭包问题
-        if (event.type === 'status') {
-          setProgressMessage(event.message || '');
-          if (event.progress !== undefined && event.progress !== null) {
-            console.log('Status: Setting progress to:', event.progress); // 调试日志
-            setProgress(() => event.progress!);
-          }
-        } else if (event.type === 'progress') {
-          const progressValue = typeof event.progress === 'number' ? event.progress : 0;
-          console.log('Progress: Setting progress to:', progressValue, 'from event:', event); // 调试日志
-          setProgress(() => progressValue);
-          // 同时更新消息，显示当前处理的论文
-          if (event.paper_title) {
-            setProgressMessage(() => `正在处理: ${event.paper_title}...`);
-          }
-          if (event.current !== undefined && event.total !== undefined) {
-            setCurrentPaper({
-              current: event.current,
-              total: event.total,
-              title: event.paper_title || '',
-            });
-          }
-        } else if (event.type === 'complete') {
-          console.log('Complete event received, papers:', event.papers?.length);
-          setProgress(() => 100);
-          setProgressMessage('完成！');
-          if (event.papers) {
-            setPapers(event.papers);
-          }
-          setLoading(false);
-          setCurrentPaper(null);
-        } else if (event.type === 'error') {
-          setError(event.message || '搜索失败');
-          setLoading(false);
-          setCurrentPaper(null);
-        }
-      }
-    );
-
-    abortRef.current = cancel;
+    try {
+      const response = await searchPapers({ keywords, question, engines });
+      setPapers(response.papers);
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || '搜索失败');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleToggleSelect = (arxivId: string) => {
@@ -110,13 +65,9 @@ function App() {
         )}
 
         {loading && (
-          <ProgressBar
-            progress={progress}
-            message={progressMessage || '处理中...'}
-            current={currentPaper?.current}
-            total={currentPaper?.total}
-            paperTitle={currentPaper?.title}
-          />
+          <div style={styles.loading}>
+            正在搜索和处理论文，请稍候...
+          </div>
         )}
 
         {!loading && papers.length > 0 && (

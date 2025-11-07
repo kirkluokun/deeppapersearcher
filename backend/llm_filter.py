@@ -50,9 +50,12 @@ def filter_papers(keywords: str, question: str, papers: List[Dict]) -> List[Dict
     papers_text = ""
     for i, paper in enumerate(papers, 1):
         # 转义标题和摘要中的花括号
-        title = paper['title'].replace('{', '{{').replace('}', '}}')
-        abstract = paper['abstract'][:500].replace('{', '{{').replace('}', '}}')
-        papers_text += f"\n[{i}] arXiv ID: {paper['arxiv_id']}\n"
+        title = paper.get('title', '').replace('{', '{{').replace('}', '}}')
+        abstract = (paper.get('abstract') or '')[:500].replace('{', '{{').replace('}', '}}')
+        # 统一获取论文 ID（arxiv_id 或 paper_id）
+        paper_id = paper.get('arxiv_id') or paper.get('paper_id', '')
+        source = paper.get('source', 'unknown')
+        papers_text += f"\n[{i}] 论文 ID: {paper_id} (来源: {source})\n"
         papers_text += f"标题: {title}\n"
         papers_text += f"摘要: {abstract}...\n"
     
@@ -61,14 +64,15 @@ def filter_papers(keywords: str, question: str, papers: List[Dict]) -> List[Dict
         ("system", 
          "你是一位学术研究助手。你的任务是根据用户的问题，从给定的论文列表中筛选出最相关的论文。\n"
          "请仔细阅读每篇论文的标题和摘要，判断它们是否与用户的问题相关。\n"
-         "只返回最相关的论文的 arXiv ID，每行一个 ID，最多返回 {max_results} 篇，按相关度从高到低排序。\n"
+         "只返回最相关的论文的 ID（每行一个 ID），最多返回 {max_results} 篇，按相关度从高到低排序。\n"
+         "返回格式：每行一个论文 ID（与论文列表中显示的 ID 完全一致）。\n"
          "不要包含任何其他文字或解释。\n"
          "如果所有论文都不相关，返回空行。"),
         ("user",
          "搜索关键词: {keywords}\n\n"
          "用户问题: {question}\n\n"
          "论文列表:\n{papers_text}\n\n"
-         "请根据用户问题，返回最相关的论文的 arXiv ID（每行一个，最多 {max_results} 篇）:")
+         "请根据用户问题，返回最相关的论文的 ID（每行一个，最多 {max_results} 篇）:")
     ])
     
     try:
@@ -81,30 +85,32 @@ def filter_papers(keywords: str, question: str, papers: List[Dict]) -> List[Dict
             "max_results": MAX_FILTERED_RESULTS
         })
         
-        # 解析返回的 arXiv ID
+        # 解析返回的论文 ID
         selected_ids = []
         response_text = response.content.strip()
         
         for line in response_text.split("\n"):
             line = line.strip()
-            # 提取 arXiv ID（可能是纯 ID 或包含 URL）
+            # 提取论文 ID（可能是纯 ID 或包含 URL）
             if line:
                 # 如果包含 URL，提取 ID
-                if "arxiv.org" in line:
-                    arxiv_id = line.split("/")[-1].strip()
+                if "arxiv.org" in line or "semanticscholar.org" in line:
+                    paper_id = line.split("/")[-1].strip()
                 else:
-                    arxiv_id = line.strip()
+                    paper_id = line.strip()
                 
-                # 验证 ID 格式（通常是 YYMM.NNNNN 格式）
-                if arxiv_id and len(arxiv_id) > 5:
-                    selected_ids.append(arxiv_id)
+                # 验证 ID 格式（arXiv 通常是 YYMM.NNNNN，Semantic Scholar 是哈希值）
+                if paper_id and len(paper_id) > 5:
+                    selected_ids.append(paper_id)
         
         # 根据筛选出的 ID 返回论文
         filtered_papers = []
         selected_ids_set = set(selected_ids)
         
         for paper in papers:
-            if paper['arxiv_id'] in selected_ids_set:
+            # 统一获取论文 ID（arxiv_id 或 paper_id）
+            paper_id = paper.get('arxiv_id') or paper.get('paper_id', '')
+            if paper_id in selected_ids_set:
                 filtered_papers.append(paper)
         
         # 限制最多返回 MAX_FILTERED_RESULTS 篇

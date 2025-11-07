@@ -7,10 +7,10 @@
 ARXIV_CATEGORY = "cs"
 
 # 最大检索数量（相关度最高的30篇）
-MAX_SEARCH_RESULTS = 30
+MAX_SEARCH_RESULTS = 100
 
 # LLM 筛选后最多返回的论文数量
-MAX_FILTERED_RESULTS = 15
+MAX_FILTERED_RESULTS = 20
 
 # Gemini 模型配置
 GEMINI_MODEL = "gemini-2.0-flash"

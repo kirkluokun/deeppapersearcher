@@ -30,12 +30,70 @@ def translate_and_extract_keywords(paper: Dict, user_question: str = "") -> Dict
     title = paper.get("title", "")
     abstract = paper.get("abstract", "")
     
-    if not abstract:
-        return {
-            "abstract_zh": "",
-            "keywords": "",
-            "relevance_summary": ""
-        }
+    # 如果没有摘要（Semantic Scholar 可能没有），仍然提取关键词和评估相关性
+    if not abstract or abstract == "(Semantic Scholar 数据源中未提供摘要)":
+        # 仅基于标题进行评估
+        title_escaped = title.replace('{', '{{').replace('}', '}}')
+        question_escaped = user_question.replace('{', '{{').replace('}', '}}')
+        
+        prompt_template = ChatPromptTemplate.from_messages([
+            ("user",
+             "请完成以下任务：\n\n"
+             "1. 从论文标题中提取3-5个中文关键词，用中文逗号分隔\n"
+             "2. 评估这篇论文是否能解决用户的问题，给出一个极简的概述（1-2句话）\n\n"
+             "用户问题: {user_question}\n\n"
+             "论文标题: {title}\n\n"
+             "注意：这篇论文没有提供摘要。\n\n"
+             "请按照以下格式返回（JSON格式）：\n"
+             "{{\n"
+             "  \"keywords\": \"关键词1，关键词2，关键词3\",\n"
+             "  \"relevance_summary\": \"能否解决用户问题的极简概述\"\n"
+             "}}\n\n"
+             "只返回JSON，不要包含其他文字。")
+        ])
+        
+        try:
+            chain = prompt_template | llm
+            response = chain.invoke({
+                "title": title_escaped,
+                "user_question": question_escaped
+            })
+            
+            response_text = response.content.strip()
+            import json
+            import re
+            
+            json_match = re.search(r'\{[^{}]*"keywords"[^{}]*\}', response_text, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(0)
+            else:
+                json_str = response_text
+            
+            json_str = json_str.replace('```json', '').replace('```', '').strip()
+            
+            try:
+                result = json.loads(json_str)
+                return {
+                    "abstract_zh": "(Semantic Scholar 数据源中未提供摘要)",
+                    "keywords": result.get("keywords", ""),
+                    "relevance_summary": result.get("relevance_summary", "")
+                }
+            except json.JSONDecodeError:
+                keywords_match = re.search(r'"keywords":\s*"([^"]+)"', response_text)
+                relevance_match = re.search(r'"relevance_summary":\s*"([^"]+)"', response_text)
+                
+                return {
+                    "abstract_zh": "(Semantic Scholar 数据源中未提供摘要)",
+                    "keywords": keywords_match.group(1) if keywords_match else "",
+                    "relevance_summary": relevance_match.group(1) if relevance_match else ""
+                }
+        except Exception as e:
+            print(f"处理无摘要论文失败: {str(e)}")
+            return {
+                "abstract_zh": "(Semantic Scholar 数据源中未提供摘要)",
+                "keywords": "",
+                "relevance_summary": ""
+            }
     
     # 转义花括号
     title_escaped = title.replace('{', '{{').replace('}', '}}')
@@ -133,8 +191,11 @@ def process_papers(papers: List[Dict], user_question: str = "", progress_callbac
     
     logger = logging.getLogger(__name__)
     
-    # 创建索引映射，保持顺序
-    paper_index_map = {paper['arxiv_id']: i for i, paper in enumerate(papers)}
+    # 创建索引映射，保持顺序（使用统一的论文 ID）
+    paper_index_map = {}
+    for i, paper in enumerate(papers):
+        paper_id = paper.get('arxiv_id') or paper.get('paper_id', f'paper_{i}')
+        paper_index_map[paper_id] = i
     results = [None] * len(papers)  # 预分配结果列表
     completed_count = 0
     total = len(papers)
@@ -142,10 +203,11 @@ def process_papers(papers: List[Dict], user_question: str = "", progress_callbac
     # 使用线程池并发处理（最多5个并发，避免API限制）
     with ThreadPoolExecutor(max_workers=5) as executor:
         # 提交所有任务，并记录索引
-        future_to_index = {
-            executor.submit(translate_and_extract_keywords, paper, user_question): paper_index_map[paper['arxiv_id']]
-            for paper in papers
-        }
+        future_to_index = {}
+        for i, paper in enumerate(papers):
+            paper_id = paper.get('arxiv_id') or paper.get('paper_id', f'paper_{i}')
+            index = paper_index_map[paper_id]
+            future_to_index[executor.submit(translate_and_extract_keywords, paper, user_question)] = index
         
         # 收集结果并保持顺序
         for future in as_completed(future_to_index):
@@ -166,11 +228,11 @@ def process_papers(papers: List[Dict], user_question: str = "", progress_callbac
                 if progress_callback:
                     progress_callback(completed_count, total, paper.get('title', ''))
             except Exception as e:
-                logger.warning(f"处理论文 {paper.get('arxiv_id', 'unknown')} 失败: {str(e)}")
+                logger.warning(f"处理论文失败: {str(e)}")
                 # 如果处理失败，使用原论文数据
                 paper_with_translation = {
                     **paper,
-                    "abstract_zh": paper.get("abstract", ""),
+                    "abstract_zh": paper.get("abstract", "") or "(Semantic Scholar 数据源中未提供摘要)",
                     "keywords": "",
                     "relevance_summary": ""
                 }
