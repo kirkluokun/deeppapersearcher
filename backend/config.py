@@ -6,8 +6,8 @@
 # arXiv 分类限制（目前仅支持 cs）
 ARXIV_CATEGORY = "cs"
 
-# 最大检索数量（相关度最高的30篇）
-MAX_SEARCH_RESULTS = 100
+# 每个检索引擎的最大检索数量（每个引擎都使用相同的配置）
+MAX_SEARCH_RESULTS_PER_ENGINE = 50
 
 # LLM 筛选后最多返回的论文数量
 MAX_FILTERED_RESULTS = 20

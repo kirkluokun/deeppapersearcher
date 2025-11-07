@@ -96,7 +96,12 @@ function PaperItem({
             )}
             {paper.source && (
               <span style={styles.metaItem}>
-                来源: {paper.source === 'arxiv' ? 'arXiv' : 'Semantic Scholar'}
+                来源: {
+                  paper.source === 'arxiv' ? 'arXiv' :
+                  paper.source === 'semantic_scholar' ? 'Semantic Scholar' :
+                  paper.source === 'pubmed' ? 'PubMed' :
+                  paper.source
+                }
               </span>
             )}
           </div>

@@ -30,6 +30,12 @@ def translate_and_extract_keywords(paper: Dict, user_question: str = "") -> Dict
     title = paper.get("title", "")
     abstract = paper.get("abstract", "")
     
+    # 确保 title 和 abstract 是字符串类型
+    if not isinstance(title, str):
+        title = str(title) if title else ""
+    if not isinstance(abstract, str):
+        abstract = str(abstract) if abstract else ""
+    
     # 如果没有摘要（Semantic Scholar 可能没有），仍然提取关键词和评估相关性
     if not abstract or abstract == "(Semantic Scholar 数据源中未提供摘要)":
         # 仅基于标题进行评估

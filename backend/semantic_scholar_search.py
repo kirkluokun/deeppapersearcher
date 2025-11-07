@@ -5,8 +5,12 @@ Semantic Scholar 论文检索模块
 
 import requests
 import time
+import logging
 from typing import List, Dict, Optional
-from config import MAX_SEARCH_RESULTS
+from config import MAX_SEARCH_RESULTS_PER_ENGINE
+
+# 配置日志
+logger = logging.getLogger(__name__)
 
 
 class SemanticScholarAPI:
@@ -31,7 +35,7 @@ class SemanticScholarAPI:
     def search_papers(
         self,
         query: str,
-        limit: int = MAX_SEARCH_RESULTS,
+        limit: int = None,
         fields: Optional[List[str]] = None,
         year: Optional[str] = None,
         fields_of_study: Optional[List[str]] = None
@@ -41,7 +45,7 @@ class SemanticScholarAPI:
         
         Args:
             query: 搜索查询字符串
-            limit: 返回结果数量限制
+            limit: 返回结果数量限制（如果为 None，使用默认值 MAX_SEARCH_RESULTS_PER_ENGINE）
             fields: 要返回的字段列表
             year: 年份过滤（格式：YYYY 或 YYYY-YYYY）
             fields_of_study: 研究领域过滤（如 ["Computer Science"]）
@@ -49,6 +53,10 @@ class SemanticScholarAPI:
         Returns:
             论文列表
         """
+        # 确定返回数量限制
+        if limit is None:
+            limit = MAX_SEARCH_RESULTS_PER_ENGINE
+        
         # 默认字段
         if fields is None:
             fields = [
@@ -80,46 +88,93 @@ class SemanticScholarAPI:
         # 使用 GET /paper/search 端点
         url = f"{self.BASE_URL}/paper/search"
         
-        try:
-            response = requests.get(
-                url,
-                params=params,
-                headers=self.headers,
-                timeout=30
-            )
-            
-            # 处理速率限制
-            if response.status_code == 429:
-                time.sleep(5)
+        # 重试配置
+        max_retries = 3
+        retry_delay = 10  # 初始延迟10秒
+        
+        for attempt in range(max_retries):
+            try:
                 response = requests.get(
                     url,
                     params=params,
                     headers=self.headers,
                     timeout=30
                 )
-            
-            response.raise_for_status()
-            
-            data = response.json()
-            return data.get("data", [])
-            
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"Semantic Scholar 搜索失败: {str(e)}")
+                
+                # 处理速率限制（429）
+                if response.status_code == 429:
+                    # 检查响应头中的 Retry-After
+                    retry_after = response.headers.get('Retry-After')
+                    if retry_after:
+                        try:
+                            wait_time = int(retry_after)
+                        except ValueError:
+                            wait_time = retry_delay * (attempt + 1)
+                    else:
+                        wait_time = retry_delay * (attempt + 1)
+                    
+                    if attempt < max_retries - 1:
+                        logger.warning(f"遇到速率限制 (429)，等待 {wait_time} 秒后重试 (尝试 {attempt + 1}/{max_retries})...")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise Exception(
+                            f"Semantic Scholar API 速率限制：已达到最大重试次数。"
+                            f"建议：1) 等待一段时间后重试 2) 申请 API 密钥以获得更高的速率限制"
+                        )
+                
+                # 检查其他错误状态
+                response.raise_for_status()
+                
+                # 成功获取数据
+                data = response.json()
+                return data.get("data", [])
+                
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429 and attempt < max_retries - 1:
+                    # HTTPError 也可能包含 429，继续重试
+                    retry_after = e.response.headers.get('Retry-After')
+                    if retry_after:
+                        try:
+                            wait_time = int(retry_after)
+                        except ValueError:
+                            wait_time = retry_delay * (attempt + 1)
+                    else:
+                        wait_time = retry_delay * (attempt + 1)
+                    
+                    logger.warning(f"遇到速率限制 (429)，等待 {wait_time} 秒后重试 (尝试 {attempt + 1}/{max_retries})...")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    raise Exception(f"Semantic Scholar API 错误 ({e.response.status_code}): {str(e)}")
+            except requests.exceptions.RequestException as e:
+                if attempt < max_retries - 1:
+                    logger.warning(f"请求失败，等待 {retry_delay} 秒后重试 (尝试 {attempt + 1}/{max_retries}): {str(e)}")
+                    time.sleep(retry_delay)
+                    continue
+                else:
+                    raise Exception(f"Semantic Scholar 搜索失败: {str(e)}")
+        
+        # 如果所有重试都失败
+        raise Exception("Semantic Scholar 搜索失败：已达到最大重试次数")
 
 
-def search_papers(keywords: str) -> List[Dict]:
+def search_papers(keywords: str, limit: int = None) -> List[Dict]:
     """
     搜索 Semantic Scholar 论文并格式化返回
     
     Args:
         keywords: 搜索关键词
+        limit: 返回的最大数量（如果为 None，使用默认值 MAX_SEARCH_RESULTS_PER_ENGINE）
         
     Returns:
         论文列表，每个论文包含标准化的字段
     """
     try:
+        logger.info(f"开始调用 Semantic Scholar API，关键词: {keywords}, limit: {limit}")
         api = SemanticScholarAPI()
-        raw_papers = api.search_papers(keywords, limit=MAX_SEARCH_RESULTS)
+        raw_papers = api.search_papers(keywords, limit=limit)
+        logger.info(f"Semantic Scholar API 返回 {len(raw_papers)} 篇原始论文")
         
         # 格式化论文数据，统一字段格式
         papers = []

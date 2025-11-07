@@ -86,6 +86,16 @@ export default function SearchForm({ onSearch, loading }: SearchFormProps) {
             />
             Semantic Scholar
           </label>
+          <label style={styles.checkboxLabel}>
+            <input
+              type="checkbox"
+              checked={engines.includes('pubmed')}
+              onChange={() => handleEngineChange('pubmed')}
+              disabled={loading}
+              style={styles.checkbox}
+            />
+            PubMed
+          </label>
         </div>
       </div>
       

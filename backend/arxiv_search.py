@@ -5,20 +5,24 @@ arXiv 论文检索模块
 
 import arxiv
 from typing import List, Dict
-from config import ARXIV_CATEGORY, MAX_SEARCH_RESULTS
+from config import ARXIV_CATEGORY, MAX_SEARCH_RESULTS_PER_ENGINE
 
 
-def search_papers(keywords: str) -> List[Dict]:
+def search_papers(keywords: str, limit: int = None) -> List[Dict]:
     """
     搜索 arXiv 论文
     
     Args:
         keywords: 搜索关键词
+        limit: 返回的最大数量（如果为 None，使用默认值 MAX_SEARCH_RESULTS_PER_ENGINE）
         
     Returns:
         论文列表，每个论文包含 title, abstract, arxiv_id, url 等信息
     """
     try:
+        # 确定返回数量限制
+        max_results = limit if limit is not None else MAX_SEARCH_RESULTS_PER_ENGINE
+        
         # 构建查询，限制在 cs 分类
         # 注意：arXiv API 不支持 AND 关键字，使用空格分隔即可
         # 使用 all: 前缀在所有字段（标题、摘要等）中搜索
@@ -37,7 +41,7 @@ def search_papers(keywords: str) -> List[Dict]:
         # 创建搜索对象
         search = arxiv.Search(
             query=query,
-            max_results=MAX_SEARCH_RESULTS,
+            max_results=max_results,
             sort_by=arxiv.SortCriterion.Relevance
         )
         

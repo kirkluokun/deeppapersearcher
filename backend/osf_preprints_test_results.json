@@ -1,0 +1,373 @@
+{
+  "test_time": "2025-11-07T21:13:39.573194",
+  "query": "machine learning",
+  "limit": 10,
+  "tests": [
+    {
+      "name": "基本请求（获取预印本列表）",
+      "url": "https://api.osf.io/v2/preprints/",
+      "params": {
+        "page[size]": 10
+      },
+      "status": 200,
+      "success": true,
+      "data": {
+        "total_preprints": 10,
+        "meta": {
+          "version": "2.0"
+        },
+        "sample_preprints": [
+          {
+            "id": "rnztj_v1",
+            "type": "preprints",
+            "title": "Explaining how electoral non-participation perpetuates political powerlessness raises young people’s voting intentions",
+            "description": "Objective: Young people’s low electoral turnout in the U.K. perpetuates a vicious cycle of political underrepresentation and disengagement, undermining democratic quality and stability. We addressed a prevailing psychological motivator of youth non-voting: a perception of political powerlessness. We experimentally evaluated an empathetic refutation approach that explained how electoral non-participation perpetuates political powerlessness while affirming young people’s psychological reasons for ",
+            "tags": [],
+            "date_created": "2025-11-07T11:51:46.772011",
+            "date_published": "2025-11-07T12:27:03.466017",
+            "is_published": true,
+            "public": true,
+            "subjects": [
+              [
+                {
+                  "id": "5b4e7425c6983001430b6c1e",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5b4e7425c6983001430b6c34",
+                  "text": "Social and Personality Psychology"
+                },
+                {
+                  "id": "5b4e7427c6983001430b6c7a",
+                  "text": "Interventions"
+                }
+              ],
+              [
+                {
+                  "id": "5b4e7425c6983001430b6c1e",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5b4e7425c6983001430b6c34",
+                  "text": "Social and Personality Psychology"
+                },
+                {
+                  "id": "5b4e7428c6983001430b6cc9",
+                  "text": "Politics"
+                }
+              ]
+            ],
+            "links": {
+              "html": "https://osf.io/preprints/psyarxiv/rnztj_v1/",
+              "preprint_doi": "https://doi.org/10.31234/osf.io/rnztj_v1",
+              "self": "https://api.osf.io/v2/preprints/rnztj_v1/"
+            },
+            "relationships": {
+              "contributors": "https://api.osf.io/v2/preprints/rnztj_v1/contributors/",
+              "bibliographic_contributors": "https://api.osf.io/v2/preprints/rnztj_v1/bibliographic_contributors/",
+              "primary_file": "https://api.osf.io/v2/files/690ddd5d1bd179616bbe3037/",
+              "files": "https://api.osf.io/v2/preprints/rnztj_v1/files/"
+            }
+          },
+          {
+            "id": "6ec5r_v2",
+            "type": "preprints",
+            "title": "The role of the ‘word gap’ for the intergenerational transmission of education: A genetically sensitive study",
+            "description": "Children experience large differences in language learning opportunities during the early years. These differences include their mothers’ vocabulary sophistication, which may serve as a pathway for the transmission of educational attainment across generations. However, associations between vocabulary sophistication and education may be confounded by genetic factors that mothers and children share. In the E-Risk study—a longitudinal, nationally representative cohort of 1,116 British families, mot",
+            "tags": [
+              "mother child transmission"
+            ],
+            "date_created": "2025-11-07T11:44:33.457368",
+            "date_published": "2025-11-07T12:23:19.178244",
+            "is_published": true,
+            "public": true,
+            "subjects": [
+              [
+                {
+                  "id": "5b4e7425c6983001430b6c1e",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5b4e7425c6983001430b6c2d",
+                  "text": "Developmental Psychology"
+                },
+                {
+                  "id": "5b4e7426c6983001430b6c52",
+                  "text": "Early Childhood"
+                }
+              ],
+              [
+                {
+                  "id": "5b4e7425c6983001430b6c1e",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5b4e7425c6983001430b6c2d",
+                  "text": "Developmental Psychology"
+                },
+                {
+                  "id": "5b4e7426c6983001430b6c63",
+                  "text": "Cognitive Development"
+                }
+              ],
+              [
+                {
+                  "id": "5b4e7425c6983001430b6c1e",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5b4e7427c6983001430b6c8b",
+                  "text": "Educational Psychology"
+                }
+              ],
+              [
+                {
+                  "id": "5b4e7425c6983001430b6c1e",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5b4e7425c6983001430b6c2d",
+                  "text": "Developmental Psychology"
+                },
+                {
+                  "id": "5b4e7428c6983001430b6cac",
+                  "text": "Gene-environment Interaction"
+                }
+              ]
+            ],
+            "links": {
+              "html": "https://osf.io/preprints/psyarxiv/6ec5r_v2/",
+              "preprint_doi": "https://doi.org/10.31234/osf.io/6ec5r_v2",
+              "self": "https://api.osf.io/v2/preprints/6ec5r_v2/"
+            },
+            "relationships": {
+              "contributors": "https://api.osf.io/v2/preprints/6ec5r_v2/contributors/",
+              "bibliographic_contributors": "https://api.osf.io/v2/preprints/6ec5r_v2/bibliographic_contributors/",
+              "primary_file": "https://api.osf.io/v2/files/690ddbdf562a76b33cc1846b/",
+              "files": "https://api.osf.io/v2/preprints/6ec5r_v2/files/"
+            }
+          },
+          {
+            "id": "dvq76_v1",
+            "type": "preprints",
+            "title": "Tricky Trade-Offs on a Transparency Spectrum: How the Financial Times Approaches Transparency about AI Use in News",
+            "description": "As news organisations adopt artificial intelligence (AI), they face growing pressure to be transparent about when and how it is used – yet practical approaches remain uneven. This paper examines AI transparency through an in-depth case study of the Financial Times (FT). Drawing on 13 semi-structured interviews with 12 senior managers across editorial, product, data science, and communications, together with internal documents, we show that the FT approaches transparency as a hybrid of policy, pr",
+            "tags": [
+              "AI",
+              "AI Disclosure",
+              "AI Safety",
+              "Artificial Intelligence",
+              "GenAI",
+              "Generative AI",
+              "Journalism",
+              "LLM",
+              "News",
+              "Responsible AI",
+              "Transparency",
+              "Trust",
+              "Trust in news"
+            ],
+            "date_created": "2025-11-07T10:29:40.167139",
+            "date_published": "2025-11-07T12:48:41.910506",
+            "is_published": true,
+            "public": true,
+            "subjects": [
+              [
+                {
+                  "id": "5a8c80f7c698300375c76d84",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5a8c80f9c698300375c76e0d",
+                  "text": "Communication"
+                },
+                {
+                  "id": "5a8c80f9c698300375c76e0f",
+                  "text": "Communication Technology and New Media"
+                }
+              ],
+              [
+                {
+                  "id": "5a8c80f7c698300375c76d84",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5a8c80f9c698300375c76e0d",
+                  "text": "Communication"
+                },
+                {
+                  "id": "5a8c80f9c698300375c76e11",
+                  "text": "Journalism Studies"
+                }
+              ],
+              [
+                {
+                  "id": "5a8c80f7c698300375c76d84",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5a8c80f9c698300375c76e0d",
+                  "text": "Communication"
+                },
+                {
+                  "id": "5a8c80f9c698300375c76e1e",
+                  "text": "Mass Communication"
+                }
+              ],
+              [
+                {
+                  "id": "5a8c80f7c698300375c76d84",
+                  "text": "Social and Behavioral Sciences"
+                },
+                {
+                  "id": "5a8c80fac698300375c76e20",
+                  "text": "Sociology"
+                },
+                {
+                  "id": "5a8c80fac698300375c76e34",
+                  "text": "Communication, Information Technologies, and Media Sociology"
+                }
+              ]
+            ],
+            "links": {
+              "html": "https://osf.io/preprints/socarxiv/dvq76_v1/",
+              "preprint_doi": "https://doi.org/10.31235/osf.io/dvq76_v1",
+              "self": "https://api.osf.io/v2/preprints/dvq76_v1/"
+            },
+            "relationships": {
+              "contributors": "https://api.osf.io/v2/preprints/dvq76_v1/contributors/",
+              "bibliographic_contributors": "https://api.osf.io/v2/preprints/dvq76_v1/bibliographic_contributors/",
+              "primary_file": "https://api.osf.io/v2/files/690dca1e5e4da7de20c18a5b/",
+              "files": "https://api.osf.io/v2/preprints/dvq76_v1/files/"
+            }
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "搜索功能（关键词: machine learning）",
+      "url": "https://api.osf.io/v2/preprints/",
+      "params": {
+        "page[size]": 10,
+        "filter[title]": "machine learning"
+      },
+      "status": 200,
+      "success": true,
+      "data": {
+        "total_found": 10,
+        "meta": {
+          "version": "2.0"
+        },
+        "results": [
+          {
+            "id": "j6m4z_v1",
+            "title": "MLwrap: Simplifying Machine Learning workflows in R",
+            "description": "MLwrap is an R package designed to make the implementation of machine learning (ML) workflows accessible, efficient, and reproducible, particularly within the framework of the Knowledge Discovery in Databases (KDD) process. The package provides a unified and minimalistic interface that covers all es",
+            "date_published": "2025-11-04T19:51:24.359517",
+            "html_link": "https://osf.io/preprints/psyarxiv/j6m4z_v1/",
+            "doi_link": "https://doi.org/10.31234/osf.io/j6m4z_v1"
+          },
+          {
+            "id": "ex2q7_v1",
+            "title": "What’s Brown and Sticky? Peering Into the Ineluctable Comedic Mystery of Dad Humor with a Handful of Machine Learning Models, Hundreds of Humans, and Tens of Thousands of Dad Jokes",
+            "description": "A stick, of course. This masterpiece of human creativity is an example of a dad joke, a clean, good-natured joke founded on puns, literalism, and wordplay. After unpacking the structures, contents, and comedic devices that distinguish dad jokes from related genres, the present research explored both",
+            "date_published": "2025-10-31T16:54:46.664555",
+            "html_link": "https://osf.io/preprints/psyarxiv/ex2q7_v1/",
+            "doi_link": "https://doi.org/10.31234/osf.io/ex2q7_v1"
+          },
+          {
+            "id": "tu9cg_v1",
+            "title": "Single-trial EEG-based classification reveals Instrument-Specific Timbre Perception via traditional Machine Learning Classifiers",
+            "description": "Many users of hearing aids report challenges when listening to music. In the future, it may be possible to develop hearing aids that monitor brain activity in real-time and adapt their output to the volitions of the user. In music, this could mean selectively amplifying the sound of the instrument t",
+            "date_published": "2025-10-25T17:08:49.641643",
+            "html_link": "https://osf.io/preprints/psyarxiv/tu9cg_v1/",
+            "doi_link": "https://doi.org/10.31234/osf.io/tu9cg_v1"
+          },
+          {
+            "id": "qvpt3_v2",
+            "title": "Predicting Adolescent Response to School-Based Mindfulness:  A Machine Learning Analysis in the MYRIAD trial",
+            "description": "Importance: Depression most commonly first emerges during adolescence, making early prevention critical. While school-based mindfulness training (SBMT) offers a scalable prevention approach with broad reach, evidence of its effectiveness is mixed, and there is a compelling case for a more personaliz",
+            "date_published": "2025-10-24T15:54:51.816609",
+            "html_link": "https://osf.io/preprints/psyarxiv/qvpt3_v2/",
+            "doi_link": "https://doi.org/10.31234/osf.io/qvpt3_v2"
+          },
+          {
+            "id": "rqyvx_v2",
+            "title": "Predicting suicidal ideation from depression screening data: A network‑augmented machine learning approach",
+            "description": "Suicidal ideation often goes undetected in brief screenings. We developed a model that infers risk from routine depressive symptom data by integrating machine learning with symptom-network features. Using nationally representative data from US adults (NHANES; N = 44,922), we predicted ideation (PHQ-",
+            "date_published": "2025-10-23T18:42:08.060091",
+            "html_link": "https://osf.io/preprints/psyarxiv/rqyvx_v2/",
+            "doi_link": "https://doi.org/10.31234/osf.io/rqyvx_v2"
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "获取作者信息（预印本 ID: rnztj_v1）",
+      "url": "https://api.osf.io/v2/preprints/rnztj_v1/contributors/",
+      "params": {
+        "embed": "users",
+        "page[size]": 10
+      },
+      "status": 200,
+      "success": true,
+      "data": {
+        "total_contributors": 4,
+        "embedded_users": 0,
+        "contributors": [
+          {
+            "bibliographic": true,
+            "permission": "admin",
+            "index": 0,
+            "name": "Georgia Grogan",
+            "given_name": "Georgia",
+            "family_name": "Grogan"
+          },
+          {
+            "bibliographic": true,
+            "permission": "admin",
+            "index": 1,
+            "name": "Dawn Liu Holford",
+            "given_name": "Dawn",
+            "family_name": "Holford"
+          },
+          {
+            "bibliographic": true,
+            "permission": "write",
+            "index": 2,
+            "name": "Linda C. Karlsson",
+            "given_name": "Linda",
+            "family_name": "Karlsson"
+          },
+          {
+            "bibliographic": true,
+            "permission": "write",
+            "index": 3,
+            "name": "Stephan Lewandowsky",
+            "given_name": "Stephan",
+            "family_name": "Lewandowsky"
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "获取 PDF 文件信息",
+      "url": "https://api.osf.io/v2/files/690ddd5d1bd179616bbe3037/",
+      "params": {},
+      "status": 200,
+      "success": true,
+      "data": {
+        "file_id": "690ddd5d1bd179616bbe3037",
+        "file_name": "ERI_voting_manuscript.pdf",
+        "file_kind": "file",
+        "file_size": 1611827,
+        "download_link": "https://osf.io/download/690ddd5d1bd179616bbe3037/",
+        "html_link": "https://osf.io/rnztj_v1/files/osfstorage/690ddd5d1bd179616bbe3037"
+      },
+      "error": null
+    }
+  ]
+}
