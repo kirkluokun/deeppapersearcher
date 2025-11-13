@@ -4,12 +4,13 @@
 
 ## 功能特性
 
-1. **关键词搜索**: 输入关键词搜索 arXiv 上的计算机科学论文（cs 分类）
-2. **智能筛选**: 从相关度最高的30篇论文中，使用 Gemini 2.0 Flash 筛选出最多15篇最相关的论文
-3. **摘要翻译**: 自动将论文摘要翻译成英文
-4. **关键词提取**: 自动从摘要中提取3-5个关键词
-5. **批量选择**: 支持多选论文，一键复制所有选中论文的链接
-6. **友好界面**: 简洁美观的前端界面，支持全选/取消全选
+1. **多引擎搜索**: 支持 arXiv、Semantic Scholar、PubMed 多个搜索引擎
+2. **arXiv 全分类支持**: 支持搜索 arXiv 的所有 8 个主要学科分类（Physics、Mathematics、Computer Science、Quantitative Biology、Quantitative Finance、Statistics、Electrical Engineering and Systems Science、Economics）
+3. **智能筛选**: 从相关度最高的论文中，使用 Gemini 2.0 Flash 筛选出最相关的论文
+4. **摘要翻译**: 自动将论文摘要翻译成中文
+5. **关键词提取**: 自动从摘要中提取3-5个中文关键词
+6. **批量选择**: 支持多选论文，一键复制所有选中论文的链接
+7. **友好界面**: 简洁美观的前端界面，支持全选/取消全选，提供独立的 arXiv 专用搜索页面
 
 ## 项目结构
 
@@ -26,12 +27,16 @@ DeepPaperSearcher/
 ├── frontend/            # React 前端
 │   ├── src/
 │   │   ├── App.tsx
+│   │   ├── pages/
+│   │   │   ├── MultiEngineSearch.tsx  # 多引擎搜索页面
+│   │   │   └── ArxivSearch.tsx        # arXiv 专用搜索页面
 │   │   ├── components/
-│   │   │   ├── SearchForm.tsx
-│   │   │   ├── PaperList.tsx
-│   │   │   └── CopyButton.tsx
+│   │   │   ├── SearchForm.tsx         # 搜索表单
+│   │   │   ├── CategorySelector.tsx   # 分类选择组件
+│   │   │   ├── PaperList.tsx          # 论文列表
+│   │   │   └── CopyButton.tsx         # 批量复制按钮
 │   │   └── services/
-│   │       └── api.ts
+│   │       └── api.ts                 # API 调用服务
 │   └── package.json
 └── README.md
 ```
@@ -101,50 +106,73 @@ npm run dev
 
 ## 使用方法
 
-1. 在搜索表单中输入：
+### 多引擎搜索（默认页面）
+
+1. 访问首页 `/`，在搜索表单中输入：
    - **关键词**: 例如 "machine learning", "neural networks"
    - **你想了解的问题**: 例如 "最新的深度学习优化方法有哪些？"
+   - **选择搜索引擎**: 可以选择 arXiv、Semantic Scholar、PubMed 中的一个或多个
 
 2. 点击"搜索论文"按钮
 
-3. 系统会：
-   - 在 arXiv 上搜索相关论文（相关度最高的30篇）
-   - 使用 Gemini 2.0 Flash 从这30篇中筛选出最多15篇最相关的论文
-   - 自动翻译摘要为英文并提取关键词
-   - 显示筛选后的论文列表（最多15篇）
+3. 系统会从选定的搜索引擎中搜索并筛选相关论文
 
-4. 查看论文信息：
-   - 每篇论文显示关键词（蓝色高亮）
-   - 显示原文摘要和英文摘要
-   - 显示论文ID、发布时间、作者等信息
+### arXiv 专用搜索（支持分类选择）
 
-5. 选择论文：
-   - 勾选你感兴趣的论文
-   - 可以使用"全选"快速选择所有论文
+1. 访问 `/arxiv` 页面，或点击导航栏的"arXiv 专用搜索"
 
-6. 复制链接：
-   - 点击"复制链接"按钮
-   - 所有选中论文的链接会以每行一个的格式复制到剪贴板
+2. 选择要搜索的 arXiv 分类：
+   - **物理学** (physics)
+   - **数学** (math)
+   - **计算机科学** (cs)
+   - **定量生物学** (q-bio)
+   - **定量金融** (q-fin)
+   - **统计学** (stat)
+   - **电气工程与系统科学** (eess)
+   - **经济学** (econ)
+
+3. 输入搜索关键词和问题，点击"搜索论文"
+
+4. 系统会：
+   - 在指定分类下搜索相关论文
+   - 使用 Gemini 2.0 Flash 筛选最相关的论文
+   - 自动翻译摘要为中文并提取关键词
+   - 显示筛选后的论文列表
+
+### 查看和选择论文
+
+- 每篇论文显示关键词（蓝色高亮）
+- 显示原文摘要和中文摘要
+- 显示论文ID、发布时间、作者等信息
+- 勾选感兴趣的论文，可以使用"全选"快速选择
+- 点击"复制链接"按钮，所有选中论文的链接会以每行一个的格式复制到剪贴板
 
 ## 配置说明
 
-### 修改分类限制
+### arXiv 分类
 
-编辑 `backend/config.py` 文件，可以修改 `ARXIV_CATEGORY` 来限制其他分类：
+系统支持所有 8 个 arXiv 主要分类，分类定义在 `backend/config.py` 的 `ARXIV_CATEGORIES` 中：
 
 ```python
-ARXIV_CATEGORY = "cs"  # 目前仅支持 cs（计算机科学）
+ARXIV_CATEGORIES = {
+    "physics": "物理学",
+    "math": "数学",
+    "cs": "计算机科学",
+    "q-bio": "定量生物学",
+    "q-fin": "定量金融",
+    "stat": "统计学",
+    "eess": "电气工程与系统科学",
+    "econ": "经济学",
+}
 ```
-
-未来可以在 `AVAILABLE_CATEGORIES` 中添加更多分类。
 
 ### 修改检索和筛选数量
 
 在 `backend/config.py` 中修改：
 
 ```python
-MAX_SEARCH_RESULTS = 30  # 最大检索数量（相关度最高的30篇）
-MAX_FILTERED_RESULTS = 15  # LLM 筛选后最多返回的论文数量
+MAX_SEARCH_RESULTS_PER_ENGINE = 50  # 每个引擎的最大检索数量
+MAX_FILTERED_RESULTS = 20  # LLM 筛选后最多返回的论文数量
 ```
 
 ## 技术栈

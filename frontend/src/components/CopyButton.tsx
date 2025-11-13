@@ -20,9 +20,15 @@ export default function CopyButton({ papers, selectedIds }: CopyButtonProps) {
       return;
     }
 
-    // 收集选中论文的链接
+    // 收集选中论文的链接，将 arxiv 链接从 /abs/ 转换为 /pdf/
     const selectedPapers = papers.filter((p) => selectedIds.has(p.arxiv_id));
-    const urls = selectedPapers.map((p) => p.url).join('\n');
+    const urls = selectedPapers.map((p) => {
+      // 如果是 arxiv 链接，将 /abs/ 替换为 /pdf/
+      if (p.url && p.url.includes('arxiv.org/abs/')) {
+        return p.url.replace('/abs/', '/pdf/');
+      }
+      return p.url;
+    }).join('\n');
 
     try {
       await navigator.clipboard.writeText(urls);

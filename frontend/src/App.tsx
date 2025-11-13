@@ -1,89 +1,46 @@
 /**
  * 主应用组件
+ * 配置路由和导航
  */
 
-import React, { useState } from 'react';
-import SearchForm from './components/SearchForm';
-import PaperList from './components/PaperList';
-import CopyButton from './components/CopyButton';
-import { searchPapers, Paper } from './services/api';
+import React from 'react';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import MultiEngineSearch from './pages/MultiEngineSearch';
+import ArxivSearch from './pages/ArxivSearch';
 
 function App() {
-  const [papers, setPapers] = useState<Paper[]>([]);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSearch = async (keywords: string, question: string, engines: string[]) => {
-    setLoading(true);
-    setError(null);
-    setPapers([]);
-    setSelectedIds(new Set());
-
-    try {
-      const response = await searchPapers({ keywords, question, engines });
-      setPapers(response.papers);
-    } catch (err: any) {
-      setError(err.response?.data?.detail || err.message || '搜索失败');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleToggleSelect = (arxivId: string) => {
-    const newSelected = new Set(selectedIds);
-    if (newSelected.has(arxivId)) {
-      newSelected.delete(arxivId);
-    } else {
-      newSelected.add(arxivId);
-    }
-    setSelectedIds(newSelected);
-  };
-
-  const handleSelectAll = () => {
-    setSelectedIds(new Set(papers.map((p) => p.arxiv_id)));
-  };
-
-  const handleDeselectAll = () => {
-    setSelectedIds(new Set());
-  };
-
   return (
-    <div style={styles.app}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>arXiv 论文检索系统</h1>
-        <p style={styles.subtitle}>基于 Gemini 2.0 Flash 的智能论文筛选</p>
-      </header>
-
-      <main style={styles.main}>
-        <SearchForm onSearch={handleSearch} loading={loading} />
-
-        {error && (
-          <div style={styles.error}>
-            <strong>错误:</strong> {error}
+    <BrowserRouter>
+      <div style={styles.app}>
+        <nav style={styles.nav}>
+          <div style={styles.navContainer}>
+            <NavLink
+              to="/"
+              style={({ isActive }) => ({
+                ...styles.navLink,
+                ...(isActive ? styles.navLinkActive : {}),
+              })}
+            >
+              多引擎搜索
+            </NavLink>
+            <NavLink
+              to="/arxiv"
+              style={({ isActive }) => ({
+                ...styles.navLink,
+                ...(isActive ? styles.navLinkActive : {}),
+              })}
+            >
+              arXiv 专用搜索
+            </NavLink>
           </div>
-        )}
+        </nav>
 
-        {loading && (
-          <div style={styles.loading}>
-            正在搜索和处理论文，请稍候...
-          </div>
-        )}
-
-        {!loading && papers.length > 0 && (
-          <>
-            <CopyButton papers={papers} selectedIds={selectedIds} />
-            <PaperList
-              papers={papers}
-              selectedIds={selectedIds}
-              onToggleSelect={handleToggleSelect}
-              onSelectAll={handleSelectAll}
-              onDeselectAll={handleDeselectAll}
-            />
-          </>
-        )}
-      </main>
-    </div>
+        <Routes>
+          <Route path="/" element={<MultiEngineSearch />} />
+          <Route path="/arxiv" element={<ArxivSearch />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
@@ -92,43 +49,32 @@ const styles: { [key: string]: React.CSSProperties } = {
     minHeight: '100vh',
     backgroundColor: '#f5f5f5',
   },
-  header: {
+  nav: {
     backgroundColor: '#fff',
-    padding: '30px 20px',
-    textAlign: 'center',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    marginBottom: '30px',
+    borderBottom: '1px solid #ddd',
+    padding: '0 20px',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
   },
-  title: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: '10px',
+  navContainer: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    display: 'flex',
+    gap: '20px',
+    padding: '15px 0',
   },
-  subtitle: {
-    fontSize: '16px',
+  navLink: {
+    padding: '8px 16px',
+    textDecoration: 'none',
     color: '#666',
-  },
-  main: {
-    paddingBottom: '40px',
-  },
-  loading: {
-    maxWidth: '800px',
-    margin: '20px auto',
-    padding: '20px',
-    textAlign: 'center',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  error: {
-    maxWidth: '800px',
-    margin: '20px auto',
-    padding: '15px',
-    backgroundColor: '#f8d7da',
-    color: '#721c24',
+    fontSize: '16px',
+    fontWeight: '500',
     borderRadius: '4px',
-    border: '1px solid #f5c6cb',
+    transition: 'all 0.2s',
+  },
+  navLinkActive: {
+    color: '#007bff',
+    backgroundColor: '#e7f3ff',
+    fontWeight: '600',
   },
 };
 

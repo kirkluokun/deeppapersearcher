@@ -14,7 +14,7 @@ from semantic_scholar_search import search_papers as search_semantic_scholar_pap
 from pubmed_search import search_papers as search_pubmed_papers
 from llm_filter import filter_papers
 from translate_extract import translate_and_extract_keywords
-from config import MAX_SEARCH_RESULTS_PER_ENGINE
+from config import MAX_SEARCH_RESULTS_PER_ENGINE, is_valid_arxiv_category, ARXIV_CATEGORIES
 import time
 
 # 配置日志
@@ -39,6 +39,7 @@ class SearchRequest(BaseModel):
     keywords: str
     question: str
     engines: List[str] = ["arxiv"]  # 默认只使用 arxiv，可选: ["arxiv", "semantic_scholar", "pubmed"]
+    arxiv_category: str | None = None  # arXiv 分类（可选），如 "cs", "physics", "math" 等，默认为 None（使用默认分类 "cs"）
 
 
 # 响应模型
@@ -76,6 +77,19 @@ def process_search(request: SearchRequest) -> SearchResponse:
         if not engines:
             engines = ["arxiv"]  # 默认使用 arxiv
         
+        # 验证 arXiv 分类（如果提供了分类参数）
+        arxiv_category = request.arxiv_category
+        if arxiv_category is not None:
+            if not is_valid_arxiv_category(arxiv_category):
+                valid_categories = ', '.join(sorted(ARXIV_CATEGORIES.keys()))
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"无效的 arXiv 分类: {arxiv_category}。有效的分类包括: {valid_categories}"
+                )
+            logger.info(f"使用 arXiv 分类: {arxiv_category}")
+        else:
+            logger.info("使用默认 arXiv 分类: cs")
+        
         logger.info(f"选择了 {len(engines)} 个引擎: {engines}，每个引擎最多返回 {MAX_SEARCH_RESULTS_PER_ENGINE} 篇论文")
         
         # 1. 搜索论文（多引擎，每个引擎都返回相同数量的论文）
@@ -83,10 +97,18 @@ def process_search(request: SearchRequest) -> SearchResponse:
         
         if "arxiv" in engines:
             try:
-                logger.info(f"开始搜索 arXiv，关键词: {request.keywords}")
-                arxiv_papers = search_arxiv_papers(request.keywords, limit=MAX_SEARCH_RESULTS_PER_ENGINE)
+                logger.info(f"开始搜索 arXiv，关键词: {request.keywords}, 分类: {arxiv_category or 'cs (默认)'}")
+                arxiv_papers = search_arxiv_papers(
+                    request.keywords,
+                    limit=MAX_SEARCH_RESULTS_PER_ENGINE,
+                    category=arxiv_category
+                )
                 all_papers.extend(arxiv_papers)
                 logger.info(f"arXiv 搜索完成，找到 {len(arxiv_papers)} 篇论文")
+            except ValueError as e:
+                # 分类验证错误
+                logger.error(f"arXiv 分类验证失败: {str(e)}")
+                raise HTTPException(status_code=400, detail=str(e))
             except Exception as e:
                 logger.error(f"arXiv 搜索失败: {str(e)}", exc_info=True)
         

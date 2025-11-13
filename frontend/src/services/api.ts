@@ -25,7 +25,8 @@ export interface Paper {
 export interface SearchRequest {
   keywords: string;
   question: string;
-  engines?: string[];  // 搜索引擎列表：["arxiv", "semantic_scholar"]
+  engines?: string[];  // 搜索引擎列表：["arxiv", "semantic_scholar", "pubmed"]
+  arxiv_category?: string | null;  // arXiv 分类（可选），如 "cs", "physics", "math" 等
 }
 
 export interface SearchResponse {
