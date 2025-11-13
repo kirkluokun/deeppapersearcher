@@ -175,11 +175,24 @@ MAX_SEARCH_RESULTS_PER_ENGINE = 50  # 每个引擎的最大检索数量
 MAX_FILTERED_RESULTS = 20  # LLM 筛选后最多返回的论文数量
 ```
 
+### arXiv 搜索模式
+
+系统支持两种 arXiv 搜索模式，可在 `backend/config.py` 中配置：
+
+```python
+ARXIV_SEARCH_MODE = "oai-pmh"  # 默认使用 OAI-PMH，或 "traditional"
+```
+
+- **oai-pmh**（默认）: 使用 OAI-PMH 协议进行批量数据访问，arXiv 官方推荐用于大规模数据获取
+- **traditional**: 使用 arxiv Python 库的传统 API，适合少量搜索
+
+**注意**: OAI-PMH 模式需要安装 `sickle` 库（已包含在 requirements.txt 中）。OAI-PMH 模式不支持关键词搜索，会在获取元数据后在本地进行关键词过滤，因此可能比传统 API 慢，但更适合批量获取场景。
+
 ## 技术栈
 
 - **后端**: Python + FastAPI + LangChain + Gemini 2.0 Flash
 - **前端**: React + TypeScript + Vite
-- **论文检索**: arxiv Python 库
+- **论文检索**: arxiv Python 库（传统 API）或 OAI-PMH 协议（批量访问）
 
 ## 注意事项
 

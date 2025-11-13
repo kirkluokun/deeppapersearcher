@@ -3,5 +3,6 @@ uvicorn[standard]==0.24.0
 langchain==0.1.0
 langchain-google-genai==0.0.6
 arxiv==1.4.8
+sickle==0.7.0
 python-dotenv==1.0.0
 pydantic==2.5.0

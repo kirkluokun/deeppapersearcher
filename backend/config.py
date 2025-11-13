@@ -16,6 +16,11 @@ MAX_FILTERED_RESULTS = 20
 GEMINI_MODEL = "gemini-2.0-flash"
 GEMINI_TEMPERATURE = 0
 
+# OAI-PMH 配置
+OAI_PMH_BASE_URL = "https://oaipmh.arxiv.org/oai"
+OAI_PMH_METADATA_PREFIX = "arXiv"  # 使用 arXiv 格式（包含作者、分类、许可证信息）
+ARXIV_SEARCH_MODE = "oai-pmh"  # 搜索模式：'traditional'（传统 API）或 'oai-pmh'（OAI-PMH 协议），默认使用 OAI-PMH
+
 # arXiv 所有主要分类定义
 # 包含 8 个主要学科分类及其中文名称
 ARXIV_CATEGORIES = {
@@ -57,3 +62,24 @@ def get_category_display_name(category: str) -> str:
         分类的中文名称，如果分类无效返回原分类代码
     """
     return ARXIV_CATEGORIES.get(category, category)
+
+
+def map_category_to_oai_set(category: str) -> str:
+    """
+    将主要分类代码映射为 OAI-PMH Set 格式
+    
+    Args:
+        category: 主要分类代码（如 "cs", "physics", "math"）
+        
+    Returns:
+        OAI-PMH Set 格式字符串（如 "cs", "physics", "math"）
+        
+    Raises:
+        ValueError: 如果分类代码无效
+    """
+    if not is_valid_arxiv_category(category):
+        raise ValueError(f"无效的 arXiv 分类: {category}")
+    
+    # arXiv OAI-PMH Set 格式：主要分类直接对应 Set 名称
+    # 例如：cs -> cs, physics -> physics, math -> math
+    return category

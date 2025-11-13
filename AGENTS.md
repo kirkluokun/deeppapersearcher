@@ -25,7 +25,9 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 
 DeepPaperSearcher 是一个基于 Gemini 2.0 Flash 的智能论文检索和筛选系统，支持多引擎搜索（arXiv、Semantic Scholar、PubMed），使用 LLM 进行智能筛选，并提供摘要翻译和关键词提取功能。
 
-**新功能**: 系统现在支持 arXiv 的所有 8 个主要学科分类，并提供独立的 arXiv 专用搜索页面，用户可以选择特定分类进行搜索。
+**新功能**: 
+- 系统现在支持 arXiv 的所有 8 个主要学科分类，并提供独立的 arXiv 专用搜索页面，用户可以选择特定分类进行搜索
+- 支持 OAI-PMH 协议进行批量数据访问（可选），arXiv 官方推荐用于大规模数据获取场景
 
 ## 项目结构
 
@@ -99,6 +101,13 @@ DeepPaperSearcher/
 ### backend/arxiv_search.py
 - **功能**: 搜索 arXiv 论文，支持所有 8 个主要学科分类
 - **参数**: `category`（可选，默认为 "cs"）
+- **搜索模式**: 支持两种模式（通过 `ARXIV_SEARCH_MODE` 配置选择）
+  - **traditional**（默认）: 使用 arxiv Python 库的传统 API
+  - **oai-pmh**: 使用 OAI-PMH 协议进行批量数据访问
+- **主要函数**:
+  - `search_papers()`: 主入口函数，根据配置选择搜索模式
+  - `search_papers_traditional()`: 传统 API 实现（原有实现）
+  - `search_papers_oai_pmh()`: OAI-PMH 协议实现（新增）
 - **辅助函数**: `build_arxiv_query()` - 构建查询字符串并验证分类
 - **返回**: 包含 title, abstract, arxiv_id, url, pdf_url, authors, published
 
@@ -138,9 +147,13 @@ DeepPaperSearcher/
   - `MAX_FILTERED_RESULTS`: LLM 筛选后最多返回的论文数量（默认20）
   - `GEMINI_MODEL`: Gemini 模型名称（默认 "gemini-2.0-flash"）
   - `GEMINI_TEMPERATURE`: 模型温度（默认0）
+  - `OAI_PMH_BASE_URL`: OAI-PMH 服务地址（默认 "https://oaipmh.arxiv.org/oai"）
+  - `OAI_PMH_METADATA_PREFIX`: 元数据格式（默认 "arXiv"）
+  - `ARXIV_SEARCH_MODE`: 搜索模式（默认 "traditional"，可选 "oai-pmh"）
 - **辅助函数**:
   - `is_valid_arxiv_category(category: str) -> bool`: 验证分类代码是否有效
   - `get_category_display_name(category: str) -> str`: 获取分类的中文显示名称
+  - `map_category_to_oai_set(category: str) -> str`: 将分类代码映射为 OAI-PMH Set 格式
 
 ## 开发规范
 
