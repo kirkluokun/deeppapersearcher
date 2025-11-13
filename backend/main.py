@@ -6,16 +6,18 @@ FastAPI 主服务
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List, Dict, Optional
 import logging
 
-from arxiv_search import search_papers as search_arxiv_papers
+from arxiv_search import search_papers as search_arxiv_papers, get_latest_papers_oai_pmh
 from semantic_scholar_search import search_papers as search_semantic_scholar_papers
 from pubmed_search import search_papers as search_pubmed_papers
 from llm_filter import filter_papers
-from translate_extract import translate_and_extract_keywords
+from translate_extract import translate_and_extract_keywords, refine_abstract
 from config import MAX_SEARCH_RESULTS_PER_ENGINE, is_valid_arxiv_category, ARXIV_CATEGORIES
+from history_storage import save_history, list_history
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -45,6 +47,7 @@ class SearchRequest(BaseModel):
 # 响应模型
 class PaperResponse(BaseModel):
     title: str
+    title_zh: Optional[str] = None  # 中文标题（可选）
     abstract: str
     abstract_zh: str  # 中文摘要
     keywords: str  # 关键词（中文）
@@ -182,6 +185,7 @@ def process_search(request: SearchRequest) -> SearchResponse:
                 result = translate_and_extract_keywords(paper, request.question)
                 paper_with_translation = {
                     **paper,
+                    "title_zh": result.get("title_zh", paper.get("title", "")),
                     "abstract_zh": result["abstract_zh"],
                     "keywords": result["keywords"],
                     "relevance_summary": result["relevance_summary"]
@@ -218,6 +222,7 @@ def process_search(request: SearchRequest) -> SearchResponse:
                     paper = filtered_papers[index]
                     processed_papers[index] = {
                         **paper,
+                        "title_zh": paper.get("title", ""),
                         "abstract_zh": paper.get("abstract", "") or "(Semantic Scholar 数据源中未提供摘要)",
                         "keywords": "",
                         "relevance_summary": ""
@@ -252,6 +257,7 @@ def process_search(request: SearchRequest) -> SearchResponse:
             
             paper_response = PaperResponse(
                 title=paper.get("title", ""),
+                title_zh=paper.get("title_zh"),
                 abstract=abstract,
                 abstract_zh=abstract_zh,
                 keywords=paper.get("keywords", ""),
@@ -272,6 +278,33 @@ def process_search(request: SearchRequest) -> SearchResponse:
                 final_pubmed_count += 1
         
         logger.info(f"最终返回 {len(paper_responses)} 篇论文 (arXiv: {final_arxiv_count}, Semantic Scholar: {final_ss_count}, PubMed: {final_pubmed_count})")
+        
+        # 保存历史记录
+        # 判断记录类型：如果只使用 arxiv 引擎且指定了分类，则为 arxiv_search，否则为 multi_engine
+        record_type = 'multi_engine'
+        if len(engines) == 1 and engines[0] == 'arxiv' and request.arxiv_category:
+            record_type = 'arxiv_search'
+        
+        try:
+            # 将 PaperResponse 转换为字典格式保存
+            papers_data = [paper.dict() for paper in paper_responses]
+            save_history(
+                record_type=record_type,
+                params={
+                    "keywords": request.keywords,
+                    "question": request.question,
+                    "engines": engines,
+                    "arxiv_category": request.arxiv_category,
+                },
+                result_summary={
+                    "total": len(paper_responses),
+                    "papers_count": len(paper_responses)
+                },
+                papers=papers_data
+            )
+        except Exception as e:
+            logger.warning(f"保存历史记录失败: {str(e)}")
+        
         return SearchResponse(papers=paper_responses, total=len(paper_responses))
         
     except Exception as e:
@@ -291,6 +324,294 @@ async def search_papers_api(request: SearchRequest):
         论文列表和总数
     """
     return process_search(request)
+
+
+# 最新论文请求模型
+class LatestPapersRequest(BaseModel):
+    category: str  # 分类代码（如 "cs", "physics", "math"）
+    days: int = 7  # 获取最近多少天的论文（默认7天）
+    offset: int = 0  # 分页偏移量（默认0）
+    limit: int = 20  # 返回的最大数量（默认20）
+
+
+@app.post("/api/arxiv/latest", response_model=SearchResponse)
+async def get_latest_papers_api(request: LatestPapersRequest):
+    """
+    获取指定分类的最新论文
+    
+    Args:
+        request: 包含分类、天数、偏移量和限制的请求
+        
+    Returns:
+        论文列表（已翻译摘要）和总数
+    """
+    try:
+        # 验证分类
+        if not is_valid_arxiv_category(request.category):
+            valid_categories = ', '.join(sorted(ARXIV_CATEGORIES.keys()))
+            raise HTTPException(
+                status_code=400,
+                detail=f"无效的 arXiv 分类: {request.category}。有效的分类包括: {valid_categories}"
+            )
+        
+        logger.info(f"获取最新论文，分类: {request.category}, 天数: {request.days}, offset: {request.offset}, limit: {request.limit}")
+        
+        # 1. 使用 OAI-PMH 获取最新论文
+        papers = get_latest_papers_oai_pmh(
+            category=request.category,
+            days=request.days,
+            offset=request.offset,
+            limit=request.limit
+        )
+        
+        if not papers:
+            logger.info("未找到论文")
+            return SearchResponse(papers=[], total=0)
+        
+        logger.info(f"获取到 {len(papers)} 篇论文，开始翻译摘要")
+        
+        # 2. 自动翻译摘要（并发处理，最多5个并发）
+        total = len(papers)
+        processed_papers = [None] * total
+        
+        def process_single_paper(index: int, paper: Dict):
+            """处理单篇论文（翻译摘要）"""
+            try:
+                # 复用现有的翻译功能（不需要用户问题，只翻译摘要和标题）
+                result = translate_and_extract_keywords(paper, user_question="")
+                paper_with_translation = {
+                    **paper,
+                    "title_zh": result.get("title_zh", paper.get("title", "")),
+                    "abstract_zh": result["abstract_zh"],
+                    "keywords": result["keywords"],
+                    "relevance_summary": ""  # 最新论文不需要相关性评估
+                }
+                return index, paper_with_translation
+            except Exception as e:
+                paper_id = paper.get('arxiv_id', 'unknown')
+                logger.warning(f"处理论文 {paper_id} 失败: {str(e)}")
+                paper_with_translation = {
+                    **paper,
+                    "title_zh": paper.get("title", ""),
+                    "abstract_zh": paper.get("abstract", "") or "",
+                    "keywords": "",
+                    "relevance_summary": ""
+                }
+                return index, paper_with_translation
+        
+        # 使用线程池并发处理（最多5个并发）
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            future_to_index = {
+                executor.submit(process_single_paper, i, paper): i
+                for i, paper in enumerate(papers)
+            }
+            
+            for future in as_completed(future_to_index):
+                try:
+                    index, paper_result = future.result()
+                    processed_papers[index] = paper_result
+                except Exception as e:
+                    logger.error(f"任务执行失败: {str(e)}")
+                    index = future_to_index[future]
+                    paper = papers[index]
+                    processed_papers[index] = {
+                        **paper,
+                        "title_zh": paper.get("title", ""),
+                        "abstract_zh": paper.get("abstract", "") or "",
+                        "keywords": "",
+                        "relevance_summary": ""
+                    }
+        
+        # 3. 转换为响应格式
+        paper_responses = []
+        for paper in processed_papers:
+            abstract = paper.get("abstract", "")
+            abstract_zh = paper.get("abstract_zh", "")
+            
+            if not isinstance(abstract, str):
+                abstract = str(abstract) if abstract else ""
+            if not isinstance(abstract_zh, str):
+                abstract_zh = str(abstract_zh) if abstract_zh else ""
+            
+            if not abstract_zh and abstract:
+                abstract_zh = abstract
+            
+            published = paper.get("published")
+            if published is not None and not isinstance(published, str):
+                published = str(published) if published else None
+            
+            paper_response = PaperResponse(
+                title=paper.get("title", ""),
+                title_zh=paper.get("title_zh"),
+                abstract=abstract,
+                abstract_zh=abstract_zh,
+                keywords=paper.get("keywords", ""),
+                relevance_summary=paper.get("relevance_summary", ""),
+                arxiv_id=paper.get("arxiv_id") or paper.get("paper_id", ""),
+                url=paper.get("url", ""),
+                pdf_url=paper.get("pdf_url"),
+                authors=paper.get("authors", []),
+                published=published,
+                source=paper.get("source", "arxiv")
+            )
+            paper_responses.append(paper_response)
+        
+        logger.info(f"返回 {len(paper_responses)} 篇论文")
+        
+        # 保存历史记录
+        try:
+            # 将 PaperResponse 转换为字典格式保存
+            papers_data = [paper.dict() for paper in paper_responses]
+            save_history(
+                record_type='latest_papers',
+                params={
+                    "category": request.category,
+                    "days": request.days,
+                    "offset": request.offset,
+                    "limit": request.limit,
+                },
+                result_summary={
+                    "total": len(paper_responses),
+                    "papers_count": len(paper_responses)
+                },
+                papers=papers_data
+            )
+        except Exception as e:
+            logger.warning(f"保存历史记录失败: {str(e)}")
+        
+        return SearchResponse(papers=paper_responses, total=len(paper_responses))
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"获取最新论文失败: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# 摘要精炼请求模型
+class RefineAbstractRequest(BaseModel):
+    arxiv_id: str  # arXiv 论文 ID
+    abstract: str  # 原始摘要（可以是中文或英文）
+    title: str = ""  # 论文标题（可选，有助于理解上下文）
+
+
+# 摘要精炼响应模型
+class RefineAbstractResponse(BaseModel):
+    refined_abstract: str  # 精炼后的摘要
+
+
+@app.post("/api/arxiv/refine-abstract", response_model=RefineAbstractResponse)
+async def refine_abstract_api(request: RefineAbstractRequest):
+    """
+    精炼论文摘要，使其通俗易懂
+    
+    Args:
+        request: 包含 arXiv ID、原始摘要和标题的请求
+        
+    Returns:
+        精炼后的摘要
+    """
+    try:
+        logger.info(f"精炼摘要请求: {request.arxiv_id}")
+        
+        # 调用精炼函数（包含缓存机制）
+        refined_abstract = refine_abstract(
+            arxiv_id=request.arxiv_id,
+            abstract=request.abstract,
+            title=request.title
+        )
+        
+        logger.info(f"精炼摘要成功: {request.arxiv_id}")
+        return RefineAbstractResponse(refined_abstract=refined_abstract)
+        
+    except Exception as e:
+        logger.error(f"精炼摘要失败: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# 历史记录请求模型
+class SaveHistoryRequest(BaseModel):
+    type: str  # 记录类型（multi_engine, arxiv_search, latest_papers）
+    params: Dict  # 搜索参数
+    result_summary: Dict  # 结果摘要
+
+
+class ListHistoryRequest(BaseModel):
+    type: Optional[str] = None  # 记录类型（可选，如果为 None 则查询所有类型）
+    limit: int = 50  # 返回的最大数量（默认50）
+
+
+@app.post("/api/history/save")
+async def save_history_api(request: SaveHistoryRequest):
+    """
+    保存历史记录
+    
+    Args:
+        request: 包含记录类型、参数和结果摘要的请求
+        
+    Returns:
+        记录 ID
+    """
+    try:
+        record_id = save_history(
+            record_type=request.type,
+            params=request.params,
+            result_summary=request.result_summary
+        )
+        return {"id": record_id}
+    except Exception as e:
+        logger.error(f"保存历史记录失败: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/history/list")
+async def list_history_api(request: ListHistoryRequest):
+    """
+    查询历史记录
+    
+    Args:
+        request: 包含记录类型和限制数量的请求
+        
+    Returns:
+        历史记录列表（包含完整的论文数据）
+    """
+    try:
+        records = list_history(
+            record_type=request.type,
+            limit=request.limit
+        )
+        return {"records": records}
+    except Exception as e:
+        logger.error(f"查询历史记录失败: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/history/get/{record_id}")
+async def get_history_record(record_id: str):
+    """
+    获取单个历史记录的详细信息（包含完整论文数据）
+    
+    Args:
+        record_id: 历史记录 ID
+        
+    Returns:
+        历史记录详情（包含完整论文数据）
+    """
+    try:
+        # 查询所有类型的历史记录
+        all_records = list_history(record_type=None, limit=1000)
+        
+        # 查找匹配的记录
+        for record in all_records:
+            if record.get("id") == record_id:
+                return {"record": record}
+        
+        raise HTTPException(status_code=404, detail="历史记录不存在")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"获取历史记录失败: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":

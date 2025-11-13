@@ -7,13 +7,15 @@ import React, { useState } from 'react';
 import SearchForm from '../components/SearchForm';
 import PaperList from '../components/PaperList';
 import CopyButton from '../components/CopyButton';
-import { searchPapers, Paper } from '../services/api';
+import HistoryPanel from '../components/HistoryPanel';
+import { searchPapers, Paper, HistoryRecord } from '../services/api';
 
 export default function MultiEngineSearch() {
   const [papers, setPapers] = useState<Paper[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
 
   const handleSearch = async (keywords: string, question: string, engines: string[]) => {
     setLoading(true);
@@ -49,6 +51,27 @@ export default function MultiEngineSearch() {
     setSelectedIds(new Set());
   };
 
+  const handleSelectHistory = (record: HistoryRecord) => {
+    if (record.type === 'multi_engine') {
+      // 如果历史记录包含完整的论文数据，直接使用
+      if (record.papers && record.papers.length > 0) {
+        setPapers(record.papers);
+        setShowHistory(false);
+        return;
+      }
+      
+      // 否则重新搜索
+      if (record.params.keywords && record.params.question) {
+        handleSearch(
+          record.params.keywords,
+          record.params.question,
+          record.params.engines || ['arxiv']
+        );
+        setShowHistory(false);
+      }
+    }
+  };
+
   return (
     <div style={styles.app}>
       <header style={styles.header}>
@@ -57,6 +80,25 @@ export default function MultiEngineSearch() {
       </header>
 
       <main style={styles.main}>
+        <div style={styles.headerActions}>
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            style={styles.historyButton}
+          >
+            {showHistory ? '隐藏历史记录' : '📜 历史记录'}
+          </button>
+        </div>
+
+        {showHistory && (
+          <div style={styles.historyContainer}>
+            <HistoryPanel
+              type="multi_engine"
+              onSelectRecord={handleSelectHistory}
+              limit={20}
+            />
+          </div>
+        )}
+
         <SearchForm onSearch={handleSearch} loading={loading} />
 
         {error && (
@@ -130,6 +172,26 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#721c24',
     borderRadius: '4px',
     border: '1px solid #f5c6cb',
+  },
+  headerActions: {
+    maxWidth: '800px',
+    margin: '0 auto 20px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  historyButton: {
+    padding: '8px 16px',
+    backgroundColor: '#6c757d',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  historyContainer: {
+    maxWidth: '800px',
+    margin: '0 auto 20px',
   },
 };
 

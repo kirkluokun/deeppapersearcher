@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import CategorySelector from '../components/CategorySelector';
 import PaperList from '../components/PaperList';
 import CopyButton from '../components/CopyButton';
-import { searchPapers, Paper } from '../services/api';
+import HistoryPanel from '../components/HistoryPanel';
+import { searchPapers, Paper, HistoryRecord } from '../services/api';
 
 export default function ArxivSearch() {
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -17,6 +18,7 @@ export default function ArxivSearch() {
   const [keywords, setKeywords] = useState('');
   const [question, setQuestion] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>('cs'); // 默认选择 cs
+  const [showHistory, setShowHistory] = useState(false);
 
   const handleSearch = async () => {
     if (!keywords.trim() || !question.trim()) {
@@ -67,6 +69,31 @@ export default function ArxivSearch() {
     handleSearch();
   };
 
+  const handleSelectHistory = (record: HistoryRecord) => {
+    if (record.type === 'arxiv_search') {
+      // 如果历史记录包含完整的论文数据，直接使用
+      if (record.papers && record.papers.length > 0) {
+        setPapers(record.papers);
+        setShowHistory(false);
+        return;
+      }
+      
+      // 否则恢复搜索参数并重新搜索
+      if (record.params.keywords && record.params.question) {
+        setKeywords(record.params.keywords);
+        setQuestion(record.params.question);
+        if (record.params.arxiv_category) {
+          setSelectedCategory(record.params.arxiv_category);
+        }
+        setShowHistory(false);
+        // 延迟执行搜索，确保状态更新完成
+        setTimeout(() => {
+          handleSearch();
+        }, 100);
+      }
+    }
+  };
+
   return (
     <div style={styles.app}>
       <header style={styles.header}>
@@ -75,6 +102,25 @@ export default function ArxivSearch() {
       </header>
 
       <main style={styles.main}>
+        <div style={styles.headerActions}>
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            style={styles.historyButton}
+          >
+            {showHistory ? '隐藏历史记录' : '📜 历史记录'}
+          </button>
+        </div>
+
+        {showHistory && (
+          <div style={styles.historyContainer}>
+            <HistoryPanel
+              type="arxiv_search"
+              onSelectRecord={handleSelectHistory}
+              limit={20}
+            />
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} style={styles.form}>
           <CategorySelector
             selectedCategory={selectedCategory}
@@ -242,6 +288,26 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#721c24',
     borderRadius: '4px',
     border: '1px solid #f5c6cb',
+  },
+  headerActions: {
+    maxWidth: '800px',
+    margin: '0 auto 20px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  historyButton: {
+    padding: '8px 16px',
+    backgroundColor: '#6c757d',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  historyContainer: {
+    maxWidth: '800px',
+    margin: '0 auto 20px',
   },
 };
 

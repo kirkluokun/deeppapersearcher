@@ -1,0 +1,32 @@
+[
+  {
+    "id": "ca482b4e-c5bf-45bc-b85c-e151e93c3a0a",
+    "type": "latest_papers",
+    "timestamp": "2025-11-13T21:10:05.162512",
+    "params": {
+      "category": "cs",
+      "days": 7,
+      "offset": 0,
+      "limit": 20
+    },
+    "result_summary": {
+      "total": 20,
+      "papers_count": 20
+    }
+  },
+  {
+    "id": "7ea47030-a782-4ed5-946b-328154e4967b",
+    "type": "latest_papers",
+    "timestamp": "2025-11-13T21:07:58.600290",
+    "params": {
+      "category": "q-fin",
+      "days": 7,
+      "offset": 0,
+      "limit": 20
+    },
+    "result_summary": {
+      "total": 20,
+      "papers_count": 20
+    }
+  }
+]

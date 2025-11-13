@@ -1,0 +1,19 @@
+[
+  {
+    "id": "294bd0f9-aa3d-4852-a59f-bc8adc0ecdf2",
+    "type": "arxiv_search",
+    "timestamp": "2025-11-13T21:07:20.123759",
+    "params": {
+      "keywords": "machine learning",
+      "question": "新的方向",
+      "engines": [
+        "arxiv"
+      ],
+      "arxiv_category": "cs"
+    },
+    "result_summary": {
+      "total": 20,
+      "papers_count": 20
+    }
+  }
+]

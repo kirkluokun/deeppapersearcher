@@ -7,6 +7,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import MultiEngineSearch from './pages/MultiEngineSearch';
 import ArxivSearch from './pages/ArxivSearch';
+import LatestPapers from './pages/LatestPapers';
 
 function App() {
   return (
@@ -32,12 +33,22 @@ function App() {
             >
               arXiv 专用搜索
             </NavLink>
+            <NavLink
+              to="/latest"
+              style={({ isActive }) => ({
+                ...styles.navLink,
+                ...(isActive ? styles.navLinkActive : {}),
+              })}
+            >
+              最新论文
+            </NavLink>
           </div>
         </nav>
 
         <Routes>
           <Route path="/" element={<MultiEngineSearch />} />
           <Route path="/arxiv" element={<ArxivSearch />} />
+          <Route path="/latest" element={<LatestPapers />} />
         </Routes>
       </div>
     </BrowserRouter>

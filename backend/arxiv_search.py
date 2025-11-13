@@ -16,8 +16,17 @@ from config import (
     map_category_to_oai_set
 )
 import logging
+import threading
+import time
+from queue import Queue
 
 logger = logging.getLogger(__name__)
+
+# arXiv API 请求队列（确保串行执行，避免并发请求）
+_arxiv_request_queue = Queue()
+_arxiv_request_lock = threading.Lock()
+_last_arxiv_request_time = 0
+_MIN_REQUEST_INTERVAL = 3.0  # 最小请求间隔（秒）
 
 
 def build_arxiv_query(keywords: str, category: str = None) -> str:
@@ -193,10 +202,162 @@ def search_papers_oai_pmh(
         raise Exception(f"OAI-PMH 搜索失败: {str(e)}")
 
 
+def get_latest_papers_oai_pmh(
+    category: str,
+    days: int = 7,
+    offset: int = 0,
+    limit: int = 20
+) -> List[Dict]:
+    """
+    使用 OAI-PMH 协议获取指定分类的最新论文
+    
+    Args:
+        category: 分类代码（如 "cs", "physics", "math"）
+        days: 获取最近多少天的论文（默认7天）
+        offset: 分页偏移量（默认0）
+        limit: 返回的最大数量（默认20）
+        
+    Returns:
+        论文列表，每个论文包含 title, abstract, arxiv_id, url 等信息，按日期降序排序
+        
+    Raises:
+        ValueError: 如果分类代码无效
+        Exception: 如果获取失败
+    """
+    try:
+        from sickle import Sickle
+        from datetime import datetime, timedelta
+        
+        # 验证分类是否有效
+        if not is_valid_arxiv_category(category):
+            raise ValueError(f"无效的 arXiv 分类: {category}")
+        
+        # 计算日期范围
+        until_date = datetime.now()
+        from_date = until_date - timedelta(days=days)
+        from_date_str = from_date.strftime('%Y-%m-%d')
+        until_date_str = until_date.strftime('%Y-%m-%d')
+        
+        # 映射分类到 OAI-PMH Set
+        oai_set = map_category_to_oai_set(category)
+        logger.info(f"使用 OAI-PMH 获取最新论文，Set: {oai_set}, 日期范围: {from_date_str} 到 {until_date_str}")
+        
+        # 创建 OAI-PMH 客户端
+        sickle = Sickle(OAI_PMH_BASE_URL)
+        
+        # 获取记录（使用 from/until 参数限制日期范围，使用 set 参数限制分类）
+        # 注意：from 是 Python 关键字，需要使用字典传递参数
+        params = {
+            'metadataPrefix': OAI_PMH_METADATA_PREFIX,
+            'set': oai_set,
+            'from': from_date_str,
+            'until': until_date_str
+        }
+        records = sickle.ListRecords(**params)
+        
+        papers = []
+        
+        # 遍历所有记录并收集元数据
+        for record in records:
+            try:
+                metadata = record.metadata
+                
+                # 提取元数据字段
+                arxiv_id_raw = metadata.get('id', [''])[0] if isinstance(metadata.get('id'), list) else str(metadata.get('id', ''))
+                title = metadata.get('title', [''])[0] if isinstance(metadata.get('title'), list) else str(metadata.get('title', ''))
+                abstract = metadata.get('abstract', [''])[0] if isinstance(metadata.get('abstract'), list) else str(metadata.get('abstract', ''))
+                
+                # 提取作者信息
+                authors = []
+                authors_data = metadata.get('authors', [])
+                if authors_data:
+                    if isinstance(authors_data, list):
+                        for author in authors_data:
+                            if isinstance(author, dict):
+                                keyname = author.get('keyname', '')
+                                forenames = author.get('forenames', '')
+                                if keyname or forenames:
+                                    authors.append(f"{forenames} {keyname}".strip())
+                            elif isinstance(author, str):
+                                authors.append(author)
+                
+                # 如果 authors 字段为空，尝试从 keyname 和 forenames 字段提取
+                if not authors:
+                    keynames = metadata.get('keyname', [])
+                    forenames_list = metadata.get('forenames', [])
+                    if isinstance(keynames, list) and isinstance(forenames_list, list):
+                        for i in range(min(len(keynames), len(forenames_list))):
+                            author_name = f"{forenames_list[i]} {keynames[i]}".strip()
+                            if author_name:
+                                authors.append(author_name)
+                
+                # 提取日期信息（用于排序）
+                created = metadata.get('created', [''])[0] if isinstance(metadata.get('created'), list) else str(metadata.get('created', ''))
+                
+                # 提取分类信息
+                categories_raw = metadata.get('categories', [''])[0] if isinstance(metadata.get('categories'), list) else str(metadata.get('categories', ''))
+                categories = categories_raw.split() if categories_raw else []
+                
+                # 格式化 arXiv ID（去除版本号，如果有）
+                arxiv_id = arxiv_id_raw.split('/')[-1] if '/' in arxiv_id_raw else arxiv_id_raw
+                arxiv_id = arxiv_id.split('v')[0]  # 去除版本号
+                
+                # 构建 URL
+                url = f"https://arxiv.org/abs/{arxiv_id}"
+                pdf_url = f"https://arxiv.org/pdf/{arxiv_id}.pdf"
+                
+                paper_info = {
+                    "title": title,
+                    "abstract": abstract,
+                    "arxiv_id": arxiv_id,
+                    "url": url,
+                    "pdf_url": pdf_url,
+                    "authors": authors,
+                    "published": created[:10] if created else None,  # 只取日期部分（YYYY-MM-DD）
+                    "created_timestamp": created,  # 保留完整时间戳用于排序
+                    "categories": categories,
+                    "source": "arxiv"  # 标记来源
+                }
+                papers.append(paper_info)
+                
+            except Exception as e:
+                # 跳过无法解析的记录，继续处理下一条
+                logger.warning(f"跳过无法解析的记录: {str(e)}")
+                continue
+        
+        logger.info(f"OAI-PMH 获取完成，共找到 {len(papers)} 篇论文")
+        
+        # 按日期排序（降序，最新的在前）
+        # 使用 created_timestamp 字段进行排序
+        papers.sort(key=lambda x: x.get('created_timestamp', ''), reverse=True)
+        
+        # 如果获取的论文超过 limit，先排序再取前 limit 篇
+        # 然后根据 offset 和 limit 进行分页
+        total_papers = len(papers)
+        start_idx = offset
+        end_idx = offset + limit
+        paginated_papers = papers[start_idx:end_idx]
+        
+        # 移除临时字段 created_timestamp（不需要返回给前端）
+        for paper in paginated_papers:
+            paper.pop('created_timestamp', None)
+        
+        logger.info(f"分页返回: offset={offset}, limit={limit}, 返回 {len(paginated_papers)} 篇论文（总共 {total_papers} 篇）")
+        return paginated_papers
+        
+    except ImportError:
+        raise Exception("sickle 库未安装，请运行: pip install sickle")
+    except ValueError:
+        # 重新抛出 ValueError（分类验证错误）
+        raise
+    except Exception as e:
+        raise Exception(f"OAI-PMH 获取最新论文失败: {str(e)}")
+
+
 def search_papers(keywords: str, limit: int = None, category: str = None) -> List[Dict]:
     """
-    搜索 arXiv 论文
-    根据配置选择使用 OAI-PMH 协议或传统 API
+    搜索 arXiv 论文（关键词搜索）
+    关键词搜索强制使用 RESTful API，因为 OAI-PMH 不支持关键词搜索
     
     Args:
         keywords: 搜索关键词
@@ -210,17 +371,14 @@ def search_papers(keywords: str, limit: int = None, category: str = None) -> Lis
         ValueError: 如果分类代码无效
         Exception: 如果搜索失败
     """
-    # 根据配置选择搜索模式
-    if ARXIV_SEARCH_MODE == "oai-pmh":
-        return search_papers_oai_pmh(keywords, limit, category)
-    else:
-        # 使用传统 API（默认）
-        return search_papers_traditional(keywords, limit, category)
+    # 关键词搜索强制使用 RESTful API（OAI-PMH 不支持关键词搜索）
+    return search_papers_traditional(keywords, limit, category)
 
 
 def search_papers_traditional(keywords: str, limit: int = None, category: str = None) -> List[Dict]:
     """
     使用传统 arxiv API 搜索论文（原有实现）
+    添加了请求队列和延迟机制，确保符合 arXiv API rate limit 要求
     
     Args:
         keywords: 搜索关键词
@@ -234,7 +392,19 @@ def search_papers_traditional(keywords: str, limit: int = None, category: str = 
         ValueError: 如果分类代码无效
         Exception: 如果搜索失败
     """
+    global _last_arxiv_request_time
+    
     try:
+        # 确保请求间隔至少 3 秒（符合 arXiv API rate limit）
+        with _arxiv_request_lock:
+            current_time = time.time()
+            time_since_last_request = current_time - _last_arxiv_request_time
+            if time_since_last_request < _MIN_REQUEST_INTERVAL:
+                wait_time = _MIN_REQUEST_INTERVAL - time_since_last_request
+                logger.info(f"等待 {wait_time:.2f} 秒以符合 arXiv API rate limit（每 3 秒最多 1 个请求）...")
+                time.sleep(wait_time)
+            _last_arxiv_request_time = time.time()
+        
         # 确定返回数量限制
         max_results = limit if limit is not None else MAX_SEARCH_RESULTS_PER_ENGINE
         
@@ -242,10 +412,11 @@ def search_papers_traditional(keywords: str, limit: int = None, category: str = 
         query = build_arxiv_query(keywords, category)
         
         # 创建自定义 Client，使用 HTTPS URL 避免 301 重定向错误
-        # 修复：将 query_url_format 改为 HTTPS
+        # 注意：delay_seconds 只在同一 Client 实例的多次请求之间生效
+        # 我们已经在全局层面添加了延迟机制
         client = arxiv.Client(
             page_size=100,
-            delay_seconds=3.0,
+            delay_seconds=3.0,  # 保留此设置作为额外保护
             num_retries=3
         )
         # 修改 Client 的 query_url_format 为 HTTPS

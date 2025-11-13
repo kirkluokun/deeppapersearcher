@@ -37,7 +37,12 @@ function PaperItem({
           style={styles.checkbox}
         />
         <div style={styles.paperContent}>
-          <h3 style={styles.title}>{paper.title}</h3>
+          <h3 style={styles.title}>
+            {paper.title}
+            {paper.title_zh && paper.title_zh !== paper.title && (
+              <span style={styles.titleZh}>（{paper.title_zh}）</span>
+            )}
+          </h3>
           
           {paper.relevance_summary && (
             <div style={styles.relevanceSummary}>
@@ -276,6 +281,12 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontWeight: 'bold',
     marginBottom: '12px',
     color: '#333',
+  },
+  titleZh: {
+    fontSize: '18px',
+    fontWeight: 'normal',
+    color: '#666',
+    marginLeft: '8px',
   },
   relevanceSummary: {
     fontSize: '16px',
